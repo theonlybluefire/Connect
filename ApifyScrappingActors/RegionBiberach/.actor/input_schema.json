@@ -1,0 +1,24 @@
+{
+    "title": "Scrape Data from Biberach Website",
+    "type": "object",
+    "schemaVersion": 1,
+    "properties": {
+        "url": {
+            "title": "URL of the page",
+            "type": "string",
+            "description": "URL of Biberach event website",
+            "editor": "textfield",
+            "prefill": ""
+        },
+        "region": {
+            "title": "Region to use for the scrape",
+            "type": "string",
+            "description": "Region to use for the scrape, e.g., 'region-biberach', configured regions are available through the config tables.",
+            "editor": "textfield",
+            "prefill": ""
+        }
+    },
+    "required": [
+        "url"
+    ]
+}

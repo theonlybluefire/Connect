@@ -1,0 +1,12 @@
+{
+	"actorSpecification": 1,
+	"name": "ConnectEventDataScraper",
+	"title": "Connect Event Data Scraper",
+	"description": "Scrapes event data from different regions and stores it inside a Firestore collection.",
+	"version": "0.0",
+	"meta": {
+		"templateId": "ts-start"
+	},
+	"input": "./input_schema.json",
+	"dockerfile": "../Dockerfile"
+}

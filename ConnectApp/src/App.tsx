@@ -1,5 +1,5 @@
 import { Redirect, Route } from 'react-router-dom';
-import { IonApp, IonRouterOutlet, setupIonicReact } from '@ionic/react';
+import { IonApp, IonLoading, IonRouterOutlet, setupIonicReact } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import Home from './pages/Home';
 
@@ -32,22 +32,56 @@ import '@ionic/react/css/palettes/dark.system.css';
 
 /* Theme variables */
 import './theme/variables.css';
+import Login from './pages/Login';
+import { connectToFirebase } from './logic/ConnectToFirebase';
+import { FirebaseApp } from 'firebase/app';
+import { Auth, getAuth, onAuthStateChanged } from 'firebase/auth';
+import { useState } from 'react';
+import { Firestore, getFirestore } from 'firebase/firestore';
+import Logout from './pages/Logout';
 
 setupIonicReact();
+const app: FirebaseApp = connectToFirebase();
+const auth: Auth = getAuth(app);
+const db:Firestore = getFirestore(app);
 
-const App: React.FC = () => (
-  <IonApp>
-    <IonReactRouter>
-      <IonRouterOutlet>
-        <Route exact path="/home">
-          <Home />
-        </Route>
-        <Route exact path="/">
-          <Redirect to="/home" />
-        </Route>
-      </IonRouterOutlet>
-    </IonReactRouter>
-  </IonApp>
-);
+
+const App: React.FC = () => {
+  const [loggedIn, setLoggedIn] = useState<number>(-1);
+
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      setLoggedIn(1);
+    } else {
+      setLoggedIn(0);
+    }
+  });
+
+  return (
+    <IonApp>
+      <IonReactRouter>
+        <IonRouterOutlet>
+          <Route exact path="/home">
+            <Home app={app} auth={auth} db={db}/>
+          </Route>
+          <Route exact path="/">
+            <Redirect to="/home" />
+          </Route>
+          <Route exact path="/login">
+            { loggedIn === 1 && <Redirect to="/home" />}
+            { loggedIn === 0 && <Login app={app} auth={auth} db={db}  /> }
+            { loggedIn === -1 && <IonLoading mode='ios' isOpen={true} />}
+          </Route>
+          <Route exact path="/logout">
+            { loggedIn === 1 && <Logout app={app} auth={auth} db={db} /> }
+            { loggedIn === 0 && <Redirect to="/login" />}
+            { loggedIn === -1 && <IonLoading mode='ios' isOpen={true} />} 
+          </Route>
+        </IonRouterOutlet>
+      </IonReactRouter>
+    </IonApp>
+  )
+}
+
 
 export default App;
