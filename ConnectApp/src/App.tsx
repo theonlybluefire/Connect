@@ -48,7 +48,14 @@ const db:Firestore = getFirestore(app);
 
 const App: React.FC = () => {
   const [loggedIn, setLoggedIn] = useState<number>(-1);
+  const [loading, setLoading] = useState<boolean>(false);
 
+  const setLoadingState = (loading: boolean) => {
+    console.log("setLoadingState: " + loading);
+    setLoading(loading);
+  }
+  
+  
   onAuthStateChanged(auth, (user) => {
     if (user) {
       setLoggedIn(1);
@@ -57,25 +64,27 @@ const App: React.FC = () => {
     }
   });
 
+
   return (
     <IonApp>
+      
+      { loggedIn === -1 || loading && <IonLoading mode='ios' isOpen={true} />}
+
       <IonReactRouter>
         <IonRouterOutlet>
           <Route exact path="/home">
-            <Home app={app} auth={auth} db={db}/>
+            <Home setLoading={setLoadingState} app={app} auth={auth} db={db}/>
           </Route>
           <Route exact path="/">
             <Redirect to="/home" />
           </Route>
           <Route exact path="/login">
             { loggedIn === 1 && <Redirect to="/home" />}
-            { loggedIn === 0 && <Login app={app} auth={auth} db={db}  /> }
-            { loggedIn === -1 && <IonLoading mode='ios' isOpen={true} />}
+            { loggedIn === 0 && <Login setLoading={setLoadingState} app={app} auth={auth} db={db}  /> }
           </Route>
           <Route exact path="/logout">
-            { loggedIn === 1 && <Logout app={app} auth={auth} db={db} /> }
+            { loggedIn === 1 && <Logout setLoading= {setLoadingState} app={app} auth={auth} db={db} /> }
             { loggedIn === 0 && <Redirect to="/login" />}
-            { loggedIn === -1 && <IonLoading mode='ios' isOpen={true} />} 
           </Route>
         </IonRouterOutlet>
       </IonReactRouter>

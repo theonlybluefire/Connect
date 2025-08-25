@@ -5,9 +5,9 @@ export class EventData {
     added: string;
     fromDay: Date;
     toDay: Date;
-    categories?: string[];
     fromTime?: string;
     toTime?: string;
+    categories?: string[];
 
     constructor(
         name: string, 

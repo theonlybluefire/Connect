@@ -22,8 +22,9 @@ import { useEffect, useRef, useState } from 'react';
 import { EventData } from '../models/EventData';
 import { connectToFirebase } from '../logic/ConnectToFirebase';
 import { FirebaseApp } from 'firebase/app';
-import { getFirestore, Firestore, getDocs, collection } from "firebase/firestore";
+import { getFirestore, Firestore, getDocs, collection, DocumentData } from "firebase/firestore";
 import { PagesProps } from '../models/PagesProps';
+import { mapQueryToEventData } from '../logic/Mappings';
 
 
 const events = [
@@ -63,7 +64,7 @@ const events = [
 
 const DATA_COLLECTION = "com.data.events";
 
-const Home: React.FC<PagesProps> = ( {app} ) => {
+const Home: React.FC<PagesProps> = ( {setLoading, app} ) => {
   const [events, setEvents] = useState<EventData[]>([]);
   const [categories, setCategories] = useState<string[]>([]);
   const firebaseApp = useRef<FirebaseApp>(null);
@@ -77,17 +78,17 @@ const Home: React.FC<PagesProps> = ( {app} ) => {
 
   //get data
   const getFirebaseData = async () => { 
-
+    setLoading(true);
     //fetch event data from firestore
     firestoreDb.current = getFirestore(app);
 
     const querySnapshot = await getDocs(collection(firestoreDb.current,DATA_COLLECTION ));
       querySnapshot.forEach((doc) => {
-      console.log(`${doc.id} => ${JSON.stringify(doc.data())}`);
-    });
+        mapQueryToEventData(doc.data());
+      })
 
     //fetch categories from firestore
-
+    setLoading(false);
   }
 
 
@@ -147,3 +148,5 @@ const Home: React.FC<PagesProps> = ( {app} ) => {
 };
 
 export default Home;
+
+
