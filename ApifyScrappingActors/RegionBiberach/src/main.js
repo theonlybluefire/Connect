@@ -15,7 +15,7 @@ await Actor.init();
 
 // Structure of input is defined in input_schema.json
 const input = await Actor.getInput();
-let { url, region } = input;
+let { url } = input;
 
 //initialize Firebase Admin SDK
 const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_JSON);
@@ -32,17 +32,22 @@ const response = await axios.get(url);
 // Parse the downloaded HTML with Cheerio to enable data extraction.
 const $ = cheerio.load(response.data);
 
-//map regions
-switch (region) {
-    case 'region-biberach':
-        // No specific action needed for this region
-        break;
-    default:
-        console.error(`Unknown region: ${region}... Please check your input.`);
-        await Actor.exit();
+const events = [];
+const uploadPromises = [];
+
+// delete previos data
+const snapshot = await db.collection('com.data.events').where('region', '==', 'biberach').get();
+const deletePromises = [];
+snapshot.forEach(doc => {
+    deletePromises.push(doc.ref.delete());
+});
+if (deletePromises.length > 0) { //if matching documents found
+    await Promise.all(deletePromises);
+    console.log(`${deletePromises.length} documents with region "biberach" deleted.`);
+} else {
+    console.log('no documents with region "biberach" found to delete.');
 }
 
-const events = [];
 
 $('ul.veranstaltungen > li').each((i, el) => {
     const eventData = $(el).find("div > div > div");
@@ -51,20 +56,27 @@ $('ul.veranstaltungen > li').each((i, el) => {
         name: eventData.find("h3").text().trim(),
         description: eventData.find("p:not([class])").text().trim(),
         added: new Date().toISOString(),
-        timeText: eventData.find("p > time").text().trim()
+        timeText: eventData.find("p > time").text().trim(),
+        region: "biberach"
     };
 
-    //upload to firestore
-    try {
-        db.collection('com.data.regions.biberach').add(event);
-    }
-    catch (error) {
-        console.error("Error uploading to Firestore:", error);
-    };
+    // upload to firestore und verifiziere Upload
+    const uploadPromise = db.collection('com.data.events').add(event)
+        .then(docRef => {
+            console.log(`document uploaded sucessfully docId:  ${docRef.id}`);
+        })
+        .catch(error => {
+            console.error("Error while uploading document: ", error);
+        });
 
-    //push events
+    uploadPromises.push(uploadPromise);
+
+    // push events
     events.push(event);
 });
+
+// Wait for all uploads to finish
+await Promise.all(uploadPromises);
 
 //show results in console
 console.log("Results :");

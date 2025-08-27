@@ -4,13 +4,8 @@ import {
   IonPage,
   IonButton,
 } from '@ionic/react';
-import { useState } from 'react';
 import './Login.css';
-import { FirebaseApp } from 'firebase/app';
 import { PagesProps } from '../models/PagesProps';
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-
-
 
 const Logout: React.FC<PagesProps> = ({ app , auth}) => {
 

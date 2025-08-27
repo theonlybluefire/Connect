@@ -3,8 +3,9 @@ export class EventData {
     description: string;
     region: string;
     added: string;
-    fromDay: Date;
-    toDay: Date;
+    timeText: string;
+    fromDay?: Date;
+    toDay?: Date;
     fromTime?: string;
     toTime?: string;
     categories?: string[];
@@ -13,10 +14,11 @@ export class EventData {
         name: string, 
         description: string, 
         region: string,
-        added: string, 
-        fromDay:Date, 
-        toDay:Date,  
-        categories: string[], 
+        added: string,
+        timeText: string, 
+        fromDay?:Date, 
+        toDay?:Date,  
+        categories?: string[], 
         fromTime?: string, 
         toTime?: string
     ) {
@@ -26,6 +28,7 @@ export class EventData {
         this.added = added;
         this.fromDay = fromDay;
         this.toDay = toDay;
+        this.timeText = timeText;
 
         //optional
         this.categories = categories;

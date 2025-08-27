@@ -78,14 +78,18 @@ const Home: React.FC<PagesProps> = ( {setLoading, app} ) => {
 
   //get data
   const getFirebaseData = async () => { 
+    let eventsList: EventData[] = [];
+
     setLoading(true);
     //fetch event data from firestore
     firestoreDb.current = getFirestore(app);
 
     const querySnapshot = await getDocs(collection(firestoreDb.current,DATA_COLLECTION ));
       querySnapshot.forEach((doc) => {
-        mapQueryToEventData(doc.data());
-      })
+        eventsList.push(mapQueryToEventData(doc.data()));
+      });
+
+      setEvents(eventsList);
 
     //fetch categories from firestore
     setLoading(false);

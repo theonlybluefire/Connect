@@ -26,13 +26,13 @@ const Events: React.FC<EventsProps> = ( {events} ) => {
                     </IonCardHeader>
                     <IonCardContent>
                         <strong>Von:</strong>
-                        {event.fromDay.toLocaleDateString()} 
+                        {event.fromDay && event.fromDay.toLocaleDateString()} 
                         { event.fromTime && 
                             <>um {event.fromTime} Uhr </>
                         }
                         <br/>
                         <strong>Bis:</strong>
-                        {event.toDay.toLocaleDateString()} 
+                        {event.toDay && event.toDay.toLocaleDateString()} 
                         { event.toTime && 
                             <>um {event.toTime} Uhr </>
                         }

@@ -1,8 +1,8 @@
 {
 	"actorSpecification": 1,
-	"name": "RegionBiberach",
-	"title": "Scrape single page in JavaScript",
-	"description": "Scrape data from single page with provided URL.",
+	"name": "connect-region-biberach",
+	"title": "",
+	"description": "",
 	"version": "0.0",
 	"meta": {
 		"templateId": "js-start"
