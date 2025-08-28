@@ -6,39 +6,51 @@ import {
     IonCardSubtitle,
     IonChip,
     IonLabel,
-
+    IonIcon,
 } from '@ionic/react';
+
+import { pin, close, person, map } from 'ionicons/icons';
 import { EventData } from '../models/EventData';
 
 type EventsProps = {
     events: EventData[];
 };
 
-const Events: React.FC<EventsProps> = ( {events} ) => {
+const Events: React.FC<EventsProps> = ({ events }) => {
 
     return (
         <>
-            {events.map(event => (
-                <IonCard mode='ios' key={event.name + event.added}>
+            {events.map((event, idx) => (
+                <IonCard mode='ios' key={event.name + event.added + idx}>
                     <IonCardHeader>
                         <IonCardTitle>{event.name}</IonCardTitle>
-                        <IonCardSubtitle>{event.region}</IonCardSubtitle>
+                        <IonCardSubtitle>
+                            <IonChip>
+                                <IonIcon icon={map} color="primary"></IonIcon>
+                                <IonLabel>{event.region}</IonLabel>
+                            </IonChip></IonCardSubtitle>
                     </IonCardHeader>
                     <IonCardContent>
-                        <strong>Von:</strong>
-                        {event.fromDay && event.fromDay.toLocaleDateString()} 
-                        { event.fromTime && 
+                        {event.timeText &&
+                            <p>{event.timeText}</p>
+                        }
+                        {event.fromDay &&
+                            <strong>Von:</strong> &&
+                            event.fromDay.toLocaleDateString()}
+                        {event.fromTime &&
                             <>um {event.fromTime} Uhr </>
                         }
-                        <br/>
-                        <strong>Bis:</strong>
-                        {event.toDay && event.toDay.toLocaleDateString()} 
-                        { event.toTime && 
+                        <br />
+
+                        {event.toDay &&
+                            <strong>Bis:</strong> &&
+                            event.toDay.toLocaleDateString()}
+                        {event.toTime &&
                             <>um {event.toTime} Uhr </>
                         }
-                        
+
                         <strong>Kategorien :</strong>
-                        { event.categories && 
+                        {event.categories &&
                             event.categories.map((occ, idx) => (
                                 <IonChip outline={true} mode='ios' key={idx}>
                                     <IonLabel>{occ}</IonLabel>

@@ -64,32 +64,39 @@ const events = [
 
 const DATA_COLLECTION = "com.data.events";
 
-const Home: React.FC<PagesProps> = ( {setLoading, app} ) => {
-  const [events, setEvents] = useState<EventData[]>([]);
+const Home: React.FC<PagesProps> = ({ setLoading, app }) => {
+  const [currentEvents, setcurrentEvents] = useState<EventData[]>([]);
+  const events = useRef<EventData[]>([]);
   const [categories, setCategories] = useState<string[]>([]);
   const firebaseApp = useRef<FirebaseApp>(null);
   const firestoreDb = useRef<Firestore>(null);
+  const searchbar = useRef<HTMLIonSearchbarElement>(null);
 
   //temporary categories for demo purposes
   useEffect(() => {
+    console.log("test§)");
     getFirebaseData();
     setCategories(['Alle', 'Meetup', 'Sport', 'Tech', 'Kunst', 'Kino', 'Musik', 'Outdoor', 'Spiele', 'Bildung', 'Networking']);
-  },[]);
+  }, []);
 
   //get data
-  const getFirebaseData = async () => { 
+  const getFirebaseData = async () => {
     let eventsList: EventData[] = [];
 
     setLoading(true);
+
     //fetch event data from firestore
     firestoreDb.current = getFirestore(app);
 
-    const querySnapshot = await getDocs(collection(firestoreDb.current,DATA_COLLECTION ));
-      querySnapshot.forEach((doc) => {
-        eventsList.push(mapQueryToEventData(doc.data()));
-      });
+    const querySnapshot = await getDocs(collection(firestoreDb.current, DATA_COLLECTION));
+    querySnapshot.forEach((doc) => {
+      eventsList.push(mapQueryToEventData(doc.data()));
+    });
 
-      setEvents(eventsList);
+    console.log(eventsList);
+
+    events.current = eventsList;
+    setcurrentEvents(eventsList);
 
     //fetch categories from firestore
     setLoading(false);
@@ -106,6 +113,22 @@ const Home: React.FC<PagesProps> = ( {setLoading, app} ) => {
     }, 2000);
   };
 
+  const filterEventList = () => {
+    const query = searchbar.current?.value?.toLowerCase();
+
+    //filter events
+    if (query) {
+      const filteredEvents = events.current.filter((event) => {
+        return event.name.toLowerCase().includes(query) ||
+          (event.description && event.description.toLowerCase().includes(query)) ||
+          (event.region && event.region.toLowerCase().includes(query)) ||
+          (event.categories && event.categories.some(cat => cat.toLowerCase().includes(query)));
+      });
+      setcurrentEvents(filteredEvents);
+    
+    }   
+  }
+
 
   return (
     <IonPage>
@@ -117,7 +140,7 @@ const Home: React.FC<PagesProps> = ( {setLoading, app} ) => {
           <IonRefresherContent></IonRefresherContent>
         </IonRefresher>
 
-        <IonSearchbar mode='ios' animated={true} placeholder="Animated"></IonSearchbar>
+        <IonSearchbar ref={searchbar} onKeyDown={filterEventList} mode='ios' animated={true} placeholder="Nach Ereignissen suchen ..."></IonSearchbar>
 
         <div
           style={{
@@ -140,11 +163,11 @@ const Home: React.FC<PagesProps> = ( {setLoading, app} ) => {
             <IonCardSubtitle>Aktivität von Freunden </IonCardSubtitle>
           </IonCardHeader>
           <IonCardContent>
-              <p>Cooming soon</p>
+            <p>Cooming soon</p>
           </IonCardContent>
         </IonCard>
 
-        <Events events={events}/>
+        <Events events={currentEvents} />
 
       </IonContent>
     </IonPage>
