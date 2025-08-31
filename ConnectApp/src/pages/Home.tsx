@@ -15,6 +15,11 @@ import {
   IonLabel,
   IonRefresher,
   IonRefresherContent,
+  IonAvatar,
+  IonRow,
+  IonCol,
+  IonItem,
+  useIonRouter,
 } from '@ionic/react';
 import './Home.css';
 import Events from '../components/Events';
@@ -25,51 +30,16 @@ import { FirebaseApp } from 'firebase/app';
 import { getFirestore, Firestore, getDocs, collection, DocumentData } from "firebase/firestore";
 import { PagesProps } from '../models/PagesProps';
 import { mapQueryToEventData } from '../logic/Mappings';
-
-
-const events = [
-  {
-    id: 1,
-    title: 'Meetup im Park',
-    occurrences: [
-      { date: '2025-08-25', time: '15:00' },
-      { date: '2025-08-28', time: '17:00' },
-    ],
-    categories: ['Meetup', 'Sport'],
-    location: 'Stadtpark',
-    description: 'Gemeinsames Treffen im Stadtpark mit Picknick.',
-  },
-  {
-    id: 2,
-    title: 'Tech Talk',
-    occurrences: [
-      { date: '2025-09-01', time: '18:30' },
-    ],
-    categories: ['Tech', 'Kunst'],
-    location: 'Coworking Space',
-    description: 'Vortrag über neue Web-Technologien.',
-  },
-  {
-    id: 3,
-    title: 'Kinoabend',
-    occurrences: [
-      { date: '2025-09-10', time: '20:00' },
-      { date: '2025-09-17', time: '20:00' },
-    ],
-    location: 'Kino Central',
-    categories: ['Kino', 'Musik'],
-    description: 'Gemeinsamer Filmabend mit Diskussion.',
-  },
-];
+import { Router } from 'react-router';
 
 const DATA_COLLECTION = "com.data.events";
 
-const Home: React.FC<PagesProps> = ({ setLoading, app }) => {
+const Home: React.FC<PagesProps> = ({ setLoading, auth, db }) => {
+  const router = useIonRouter();
+
   const [currentEvents, setcurrentEvents] = useState<EventData[]>([]);
-  const events = useRef<EventData[]>([]);
   const [categories, setCategories] = useState<string[]>([]);
-  const firebaseApp = useRef<FirebaseApp>(null);
-  const firestoreDb = useRef<Firestore>(null);
+  const events = useRef<EventData[]>([]);
   const searchbar = useRef<HTMLIonSearchbarElement>(null);
 
   //temporary categories for demo purposes
@@ -85,10 +55,7 @@ const Home: React.FC<PagesProps> = ({ setLoading, app }) => {
 
     setLoading(true);
 
-    //fetch event data from firestore
-    firestoreDb.current = getFirestore(app);
-
-    const querySnapshot = await getDocs(collection(firestoreDb.current, DATA_COLLECTION));
+    const querySnapshot = await getDocs(collection(db, DATA_COLLECTION));
     querySnapshot.forEach((doc) => {
       eventsList.push(mapQueryToEventData(doc.data()));
     });
@@ -125,22 +92,35 @@ const Home: React.FC<PagesProps> = ({ setLoading, app }) => {
           (event.categories && event.categories.some(cat => cat.toLowerCase().includes(query)));
       });
       setcurrentEvents(filteredEvents);
-    
-    }   
+
+    }
   }
 
 
   return (
     <IonPage>
       <IonHeader>
-      </IonHeader>
-      <IonContent fullscreen>
+        <IonRow class="ion-align-items-center">
+          <IonCol size='auto'>
+            <IonChip onClick={() => router.push('/setup', 'forward', 'replace')} style={{ cursor: 'pointer' }}>
+              <IonAvatar>
+                <img alt="Silhouette of a person's head" src="https://ionicframework.com/docs/img/demos/avatar.svg" />
+              </IonAvatar>
+              <IonLabel>{auth.currentUser?.displayName || auth.currentUser?.email}</IonLabel>
+            </IonChip>
+          </IonCol>
+          <IonCol>
+            <IonSearchbar
+              ref={searchbar}
+              onKeyDown={filterEventList}
+              mode='ios'
+              animated={true}
+              placeholder="Nach Ereignissen suchen ..."
+            ></IonSearchbar>
+          </IonCol>
+        </IonRow>
 
-        <IonRefresher slot="fixed" onIonRefresh={handleRefresh}>
-          <IonRefresherContent></IonRefresherContent>
-        </IonRefresher>
 
-        <IonSearchbar ref={searchbar} onKeyDown={filterEventList} mode='ios' animated={true} placeholder="Nach Ereignissen suchen ..."></IonSearchbar>
 
         <div
           style={{
@@ -157,6 +137,14 @@ const Home: React.FC<PagesProps> = ({ setLoading, app }) => {
             </IonChip>
           ))}
         </div>
+
+      </IonHeader>
+      <IonContent fullscreen>
+
+        <IonRefresher slot="fixed" onIonRefresh={handleRefresh}>
+          <IonRefresherContent></IonRefresherContent>
+        </IonRefresher>
+
 
         <IonCard mode='ios' color="primary">
           <IonCardHeader>

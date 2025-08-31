@@ -15,7 +15,7 @@ import { PagesProps } from '../models/PagesProps';
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 
 
-const Login: React.FC<PagesProps> = ({ app }) => {
+const Login: React.FC<PagesProps> = ({ app, setError }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -25,10 +25,9 @@ const Login: React.FC<PagesProps> = ({ app }) => {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
       console.log("Angemeldet als:", user.email);
-    } catch (error) {
-      console.error("Fehler bei der Anmeldung:", error);
+    } catch (error: unknown) {
+      error instanceof Error && setError(error.message.toString());
     }
-
   };
 
   return (

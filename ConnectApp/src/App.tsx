@@ -1,5 +1,5 @@
 import { Redirect, Route } from 'react-router-dom';
-import { IonApp, IonLoading, IonRouterOutlet, setupIonicReact } from '@ionic/react';
+import { IonAlert, IonApp, IonLoading, IonRouterOutlet, setupIonicReact } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import Home from './pages/Home';
 
@@ -39,52 +39,66 @@ import { Auth, getAuth, onAuthStateChanged } from 'firebase/auth';
 import { useState } from 'react';
 import { Firestore, getFirestore } from 'firebase/firestore';
 import Logout from './pages/Logout';
+import Setup from './pages/Setup';
 
 setupIonicReact();
 const app: FirebaseApp = connectToFirebase();
 const auth: Auth = getAuth(app);
-const db:Firestore = getFirestore(app);
+const db: Firestore = getFirestore(app);
 
 
 const App: React.FC = () => {
-  const [loggedIn, setLoggedIn] = useState<number>(-1);
+  const [loggedIn, setLoggedIn] = useState<number>(-1); //def. loading
   const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string>("");
 
   const setLoadingState = (loading: boolean) => {
     console.log("setLoadingState: " + loading);
     setLoading(loading);
   }
-  
-  
+
   onAuthStateChanged(auth, (user) => {
     if (user) {
-      setLoggedIn(1);
+      setLoggedIn(1); //logged in 
     } else {
-      setLoggedIn(0);
+      setLoggedIn(0); //not logged in
     }
   });
 
 
   return (
     <IonApp>
-      
-      { loggedIn === -1 || loading && <IonLoading mode='ios' isOpen={true} />}
+
+      {loggedIn === -1 || loading && <IonLoading mode='ios' isOpen={true} />}
+
+      {error !== "" && <IonAlert
+        mode='ios'
+        isOpen={error !== ""}
+        header="Fehler"
+        subHeader="Ein Fehler ist aufgetreten"
+        message={error}
+        buttons={['OK']}
+        onDidDismiss={() => setError("")}
+      ></IonAlert>}
 
       <IonReactRouter>
         <IonRouterOutlet>
           <Route exact path="/home">
-            <Home setLoading={setLoadingState} app={app} auth={auth} db={db}/>
+            <Home setError={setError} setLoading={setLoadingState} app={app} auth={auth} db={db} />
           </Route>
           <Route exact path="/">
             <Redirect to="/home" />
           </Route>
           <Route exact path="/login">
-            { loggedIn === 1 && <Redirect to="/home" />}
-            { loggedIn === 0 && <Login setLoading={setLoadingState} app={app} auth={auth} db={db}  /> }
+            {loggedIn === 1 && <Redirect to="/home" />}
+            {loggedIn === 0 && <Login setError={setError} setLoading={setLoadingState} app={app} auth={auth} db={db} />}
           </Route>
           <Route exact path="/logout">
-            { loggedIn === 1 && <Logout setLoading= {setLoadingState} app={app} auth={auth} db={db} /> }
-            { loggedIn === 0 && <Redirect to="/login" />}
+            {loggedIn === 1 && <Logout setError={setError} setLoading={setLoadingState} app={app} auth={auth} db={db} />}
+            {loggedIn === 0 && <Redirect to="/login" />}
+          </Route>
+          <Route exact path="/setup">
+            <Setup setError={setError} setLoading={setLoadingState} app={app} auth={auth} db={db} />
           </Route>
         </IonRouterOutlet>
       </IonReactRouter>
