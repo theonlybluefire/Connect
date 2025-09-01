@@ -20,6 +20,11 @@ import {
   IonCol,
   IonItem,
   useIonRouter,
+  IonModal,
+  IonButtons,
+  IonButton,
+  IonInput,
+  IonList,
 } from '@ionic/react';
 import './Home.css';
 import Events from '../components/Events';
@@ -31,6 +36,7 @@ import { getFirestore, Firestore, getDocs, collection, DocumentData } from "fire
 import { PagesProps } from '../models/PagesProps';
 import { mapQueryToEventData } from '../logic/Mappings';
 import { Router } from 'react-router';
+import { filter } from 'ionicons/icons';
 
 const DATA_COLLECTION = "com.data.events";
 
@@ -41,6 +47,7 @@ const Home: React.FC<PagesProps> = ({ setLoading, auth, db }) => {
   const [categories, setCategories] = useState<string[]>([]);
   const events = useRef<EventData[]>([]);
   const searchbar = useRef<HTMLIonSearchbarElement>(null);
+  const filterModal = useRef<HTMLIonModalElement>(null);
 
   //temporary categories for demo purposes
   useEffect(() => {
@@ -80,7 +87,7 @@ const Home: React.FC<PagesProps> = ({ setLoading, auth, db }) => {
     }, 2000);
   };
 
-  const filterEventList = () => {
+  const searchEventList = () => {
     const query = searchbar.current?.value?.toLowerCase();
 
     //filter events
@@ -112,15 +119,18 @@ const Home: React.FC<PagesProps> = ({ setLoading, auth, db }) => {
           <IonCol>
             <IonSearchbar
               ref={searchbar}
-              onKeyDown={filterEventList}
+              onKeyDown={searchEventList}
               mode='ios'
               animated={true}
               placeholder="Nach Ereignissen suchen ..."
             ></IonSearchbar>
           </IonCol>
+          <IonCol size='auto'>
+            <IonButton id="open-filter-modal" >
+              <IonIcon icon={filter} slot="icon-only"></IonIcon>
+            </IonButton>
+          </IonCol>
         </IonRow>
-
-
 
         <div
           style={{
@@ -157,6 +167,40 @@ const Home: React.FC<PagesProps> = ({ setLoading, auth, db }) => {
 
         <Events events={currentEvents} />
 
+        <IonModal mode='ios' ref={filterModal} trigger="open-filter-modal">
+          <IonHeader>
+            <IonToolbar>
+              <IonButtons slot="start">
+              </IonButtons>
+              <IonTitle>Events filtern</IonTitle>
+              <IonButtons slot="end">
+                <IonButton strong={true} onClick={() => filterModal.current?.dismiss()}>
+                  bestätigen
+                </IonButton>
+              </IonButtons>
+            </IonToolbar>
+          </IonHeader>
+          <IonContent className="ion-padding" >
+            <IonList mode='ios'>
+              <IonItem>
+                <IonLabel position="stacked">Region</IonLabel>
+                <IonInput placeholder="nach Region suchen"></IonInput>
+              </IonItem>
+              <IonItem>
+                <IonLabel position="stacked">Datum von</IonLabel>
+                <IonInput type='date' placeholder="Datum von"></IonInput>
+              </IonItem>
+              <IonItem>
+                <IonLabel position="stacked">Datum bis</IonLabel>
+                <IonInput type='date' placeholder="Datum bis"></IonInput>
+              </IonItem>
+              <IonItem>
+                <IonLabel position="stacked">Kategorie</IonLabel>
+                <IonInput placeholder="nach Kategorien suchen"></IonInput>
+              </IonItem>
+            </IonList>
+          </IonContent>
+        </IonModal>
       </IonContent>
     </IonPage>
   );

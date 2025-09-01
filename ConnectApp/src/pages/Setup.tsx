@@ -52,7 +52,7 @@ const Setup: React.FC<PagesProps> = ({ setLoading,setError,  app, auth }) => {
                     <IonCardContent>
                         <IonList inset>
                             <IonItem>
-                                <IonTextarea ref={displayNameRef} label="Name" placeholder={user?.displayName || ""}></IonTextarea>
+                                <IonTextarea ref={displayNameRef} label="Name" value={user?.displayName || ""}></IonTextarea>
                             </IonItem>
                             <IonItem>
                                 <IonTextarea disabled ref={emailRef} label="E-Mail" placeholder={user?.email || ""}></IonTextarea>
