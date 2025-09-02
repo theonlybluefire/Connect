@@ -25,10 +25,11 @@ import {
   IonButton,
   IonInput,
   IonList,
+  IonBadge,
 } from '@ionic/react';
 import './Home.css';
 import Events from '../components/Events';
-import { useEffect, useRef, useState } from 'react';
+import { use, useEffect, useRef, useState } from 'react';
 import { EventData } from '../models/EventData';
 import { connectToFirebase } from '../logic/ConnectToFirebase';
 import { FirebaseApp } from 'firebase/app';
@@ -37,18 +38,26 @@ import { PagesProps } from '../models/PagesProps';
 import { mapQueryToEventData } from '../logic/Mappings';
 import { Router } from 'react-router';
 import { filter } from 'ionicons/icons';
+import { getAvailableRegionNames, getEventData } from '../logic/FirestoreLogic';
 
 const DATA_COLLECTION = "com.data.events";
 
-const Home: React.FC<PagesProps> = ({ setLoading, auth, db }) => {
+const Home: React.FC<PagesProps> = ({ setLoading, auth, db, setError }) => {
   const router = useIonRouter();
 
   const [currentEvents, setcurrentEvents] = useState<EventData[]>([]);
   const [categories, setCategories] = useState<string[]>([]);
+  const [regions, setRegions] = useState<string[]>([]);
   const events = useRef<EventData[]>([]);
   const searchbar = useRef<HTMLIonSearchbarElement>(null);
   const filterModal = useRef<HTMLIonModalElement>(null);
 
+  //filter
+  const [isFilterSet, setIsFilterSet] = useState<boolean>(false);
+  const filterRegion = useRef<HTMLIonInputElement>(null);
+  const filterDateFrom = useRef<HTMLIonInputElement>(null);
+  const filterDateTo = useRef<HTMLIonInputElement>(null);
+  const filterCategorie = useRef<HTMLIonInputElement>(null);
   //temporary categories for demo purposes
   useEffect(() => {
     console.log("test§)");
@@ -58,21 +67,22 @@ const Home: React.FC<PagesProps> = ({ setLoading, auth, db }) => {
 
   //get data
   const getFirebaseData = async () => {
-    let eventsList: EventData[] = [];
 
     setLoading(true);
 
-    const querySnapshot = await getDocs(collection(db, DATA_COLLECTION));
-    querySnapshot.forEach((doc) => {
-      eventsList.push(mapQueryToEventData(doc.data()));
-    });
+    try {
+      //get events
+      events.current = await getEventData(db);
 
-    console.log(eventsList);
+      //get available region ids
+      setRegions(await getAvailableRegionNames(db));
+    }
+    catch (e) {
+      setError("Fehler beim Laden der Ereignisse: " + e);
+    }
 
-    events.current = eventsList;
-    setcurrentEvents(eventsList);
+    setcurrentEvents(events.current);
 
-    //fetch categories from firestore
     setLoading(false);
   }
 
@@ -103,6 +113,46 @@ const Home: React.FC<PagesProps> = ({ setLoading, auth, db }) => {
     }
   }
 
+  const filterEventList = () => {
+
+    let region: string = filterRegion.current?.value?.toString().toLowerCase() || "";
+    let dateFrom: Date = new Date(String(filterDateFrom.current?.value));
+    let dateTo: Date = new Date(String(filterDateTo.current?.value));
+    let category: string = String(filterCategorie.current?.value);
+
+    let categories: String[] = category.split(",");
+    
+    if((region || category) != undefined) {
+      console.log("test01")
+      setIsFilterSet(true);
+    }
+    else {
+      console.log("test02");
+      setIsFilterSet(false);
+    }
+
+    ( region || category ) ? setIsFilterSet(true) : console.log("no filter set");
+
+    //filter events based on filters defined above
+    const filteredEvents = events.current.filter((event) => {
+      let matches = true;
+      if (region) {
+        matches = matches && event.region?.toLowerCase().includes(region);
+      }
+      if (dateFrom && event.fromDay) {
+        matches = matches && event.fromDay >= dateFrom;
+      }
+      if (dateTo && event.toDay) {
+        matches = matches && event.toDay <= dateTo;
+      }
+      if (category) {
+        matches = matches && event.categories?.filter((item) => categories.includes(item)).length != 0;
+      }
+      return matches;
+    });
+    setcurrentEvents(filteredEvents);
+  }
+
 
   return (
     <IonPage>
@@ -128,6 +178,9 @@ const Home: React.FC<PagesProps> = ({ setLoading, auth, db }) => {
           <IonCol size='auto'>
             <IonButton id="open-filter-modal" >
               <IonIcon icon={filter} slot="icon-only"></IonIcon>
+              { isFilterSet && 
+                <IonBadge color="danger">1</IonBadge>
+              }
             </IonButton>
           </IonCol>
         </IonRow>
@@ -174,7 +227,8 @@ const Home: React.FC<PagesProps> = ({ setLoading, auth, db }) => {
               </IonButtons>
               <IonTitle>Events filtern</IonTitle>
               <IonButtons slot="end">
-                <IonButton strong={true} onClick={() => filterModal.current?.dismiss()}>
+                <IonButton strong={true} onClick={() => { filterEventList(); filterModal.current?.dismiss() }
+                }>
                   bestätigen
                 </IonButton>
               </IonButtons>
@@ -184,19 +238,19 @@ const Home: React.FC<PagesProps> = ({ setLoading, auth, db }) => {
             <IonList mode='ios'>
               <IonItem>
                 <IonLabel position="stacked">Region</IonLabel>
-                <IonInput placeholder="nach Region suchen"></IonInput>
+                <IonInput ref={filterRegion} value={filterRegion.current?.value} placeholder="nach Region suchen"></IonInput>
               </IonItem>
               <IonItem>
                 <IonLabel position="stacked">Datum von</IonLabel>
-                <IonInput type='date' placeholder="Datum von"></IonInput>
+                <IonInput ref={filterDateFrom} value={filterDateFrom.current?.value} type='date' placeholder="Datum von"></IonInput>
               </IonItem>
               <IonItem>
                 <IonLabel position="stacked">Datum bis</IonLabel>
-                <IonInput type='date' placeholder="Datum bis"></IonInput>
+                <IonInput ref={filterDateTo} value={filterDateTo.current?.value} type='date' placeholder="Datum bis"></IonInput>
               </IonItem>
               <IonItem>
                 <IonLabel position="stacked">Kategorie</IonLabel>
-                <IonInput placeholder="nach Kategorien suchen"></IonInput>
+                <IonInput ref={filterCategorie} value={filterCategorie.current?.value} placeholder="nach Kategorien suchen"></IonInput>
               </IonItem>
             </IonList>
           </IonContent>

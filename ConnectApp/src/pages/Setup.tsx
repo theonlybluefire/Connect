@@ -59,11 +59,7 @@ const Setup: React.FC<PagesProps> = ({ setLoading,setError,  app, auth }) => {
                             </IonItem>
                         </IonList>
                     </IonCardContent>
-
-
                 </IonCard>
-
-
             </IonContent>
             <IonFooter>
                 <IonButton expand="block" onClick={finished}>Fertig</IonButton>
