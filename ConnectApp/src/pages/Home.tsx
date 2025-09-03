@@ -116,22 +116,14 @@ const Home: React.FC<PagesProps> = ({ setLoading, auth, db, setError }) => {
   const filterEventList = () => {
 
     let region: string = filterRegion.current?.value?.toString().toLowerCase() || "";
-    let dateFrom: Date = new Date(String(filterDateFrom.current?.value));
-    let dateTo: Date = new Date(String(filterDateTo.current?.value));
-    let category: string = String(filterCategorie.current?.value);
+    let dateFrom: Date | null = filterDateFrom.current?.value ? new Date(String(filterDateFrom.current?.value || "")) : null;
+    let dateTo: Date | null = filterDateTo.current?.value ?  new Date(String(filterDateTo.current?.value)) : null;
+    let category: string = filterCategorie.current?.value?.toString().toLocaleLowerCase() || "";
 
     let categories: String[] = category.split(",");
-    
-    if((region || category) != undefined) {
-      console.log("test01")
-      setIsFilterSet(true);
-    }
-    else {
-      console.log("test02");
-      setIsFilterSet(false);
-    }
 
-    ( region || category ) ? setIsFilterSet(true) : console.log("no filter set");
+    debugger;
+    ( region || category || dateTo || dateFrom) ? setIsFilterSet(true) : setIsFilterSet(false);
 
     //filter events based on filters defined above
     const filteredEvents = events.current.filter((event) => {
