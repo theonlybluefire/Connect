@@ -117,13 +117,13 @@ const Home: React.FC<PagesProps> = ({ setLoading, auth, db, setError }) => {
 
     let region: string = filterRegion.current?.value?.toString().toLowerCase() || "";
     let dateFrom: Date | null = filterDateFrom.current?.value ? new Date(String(filterDateFrom.current?.value || "")) : null;
-    let dateTo: Date | null = filterDateTo.current?.value ?  new Date(String(filterDateTo.current?.value)) : null;
+    let dateTo: Date | null = filterDateTo.current?.value ? new Date(String(filterDateTo.current?.value)) : null;
     let category: string = filterCategorie.current?.value?.toString().toLocaleLowerCase() || "";
 
     let categories: String[] = category.split(",");
 
     debugger;
-    ( region || category || dateTo || dateFrom) ? setIsFilterSet(true) : setIsFilterSet(false);
+    (region || category || dateTo || dateFrom) ? setIsFilterSet(true) : setIsFilterSet(false);
 
     //filter events based on filters defined above
     const filteredEvents = events.current.filter((event) => {
@@ -143,6 +143,33 @@ const Home: React.FC<PagesProps> = ({ setLoading, auth, db, setError }) => {
       return matches;
     });
     setcurrentEvents(filteredEvents);
+  }
+
+  const handleTodayFastFilter = () => {
+    let today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    let tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+
+    const filteredEvents = events.current.filter((event) => {
+      let matches = false;
+
+      if (event.fromDay) {
+        matches = matches && event.fromDay >= today;
+      }
+      if (event.toDay) {
+        matches = matches && event.toDay < tomorrow;
+      }
+
+      return matches;
+    });
+    
+    setcurrentEvents(filteredEvents);
+
+    console.log(filteredEvents);
+
+    setIsFilterSet(true);
   }
 
 
@@ -170,7 +197,7 @@ const Home: React.FC<PagesProps> = ({ setLoading, auth, db, setError }) => {
           <IonCol size='auto'>
             <IonButton id="open-filter-modal" >
               <IonIcon icon={filter} slot="icon-only"></IonIcon>
-              { isFilterSet && 
+              {isFilterSet &&
                 <IonBadge color="danger">1</IonBadge>
               }
             </IonButton>
@@ -186,6 +213,9 @@ const Home: React.FC<PagesProps> = ({ setLoading, auth, db, setError }) => {
             whiteSpace: 'nowrap',
           }}
         >
+          <IonChip onClick={handleTodayFastFilter} color={'primary'} mode='ios' style={{ flex: '0 0 auto', marginLeft: '8px' }}>
+            <IonLabel>Heute</IonLabel>
+          </IonChip>
           {categories.map((label, idx) => (
             <IonChip mode='ios' key={idx} style={{ flex: '0 0 auto' }}>
               <IonLabel>{label}</IonLabel>
