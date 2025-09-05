@@ -50,13 +50,40 @@ if (deletePromises.length > 0) { //if matching documents found
 
 
 $('ul.veranstaltungen > li').each((i, el) => {
+    let fromDay = null;
+    let toDay = null;
+
     const eventData = $(el).find("div > div > div");
+
+    const timeText = eventData.find("p > time").text().trim();
+
+    //format time text
+    if (timeText.includes("Datum: ")) {
+        const dateRegex = /(\d{2}\.\d{2}\.\d{4})/g;
+
+        const dates = timeText.match(dateRegex);
+
+        if (!dates) {
+            fromDay = null;
+            toDay = null;
+        }
+
+        fromDay = dates[0];
+
+        if (dates.length > 1) {
+            toDay = dates[1];
+        } else {
+            toDay = fromDay;
+        }
+    }
 
     const event = {
         name: eventData.find("h3").text().trim(),
         description: eventData.find("p:not([class])").text().trim(),
         added: new Date().toISOString(),
-        timeText: eventData.find("p > time").text().trim(),
+        timeText: timeText,
+        fromDay: fromDay,
+        toDay: toDay,
         region: "biberach"
     };
 
