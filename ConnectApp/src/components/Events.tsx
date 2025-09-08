@@ -9,7 +9,7 @@ import {
     IonIcon,
 } from '@ionic/react';
 
-import { pin, close, person, map } from 'ionicons/icons';
+import { map } from 'ionicons/icons';
 import { EventData } from '../models/EventData';
 
 type EventsProps = {
@@ -17,7 +17,6 @@ type EventsProps = {
 };
 
 const Events: React.FC<EventsProps> = ({ events }) => {
-
     return (
         <>
             {events.map((event, idx) => (
@@ -31,23 +30,30 @@ const Events: React.FC<EventsProps> = ({ events }) => {
                             </IonChip></IonCardSubtitle>
                     </IonCardHeader>
                     <IonCardContent>
-                        {event.timeText &&
+                        {event.timeText && !event.fromDay && !event.toDay &&
                             <p>{event.timeText}</p>
                         }
                         {event.fromDay &&
-                            <strong>Von:</strong> &&
-                            event.fromDay.toLocaleDateString()}
+                            <>
+                                <strong>Von: </strong>
+                                {event.fromDay.toLocaleDateString()}
+                            </>
+                        }
                         {event.fromTime &&
                             <>um {event.fromTime} Uhr </>
                         }
                         <br />
 
                         {event.toDay &&
-                            <strong>Bis:</strong> &&
-                            event.toDay.toLocaleDateString()}
+                            <>
+                                <strong>Bis: </strong>
+                                {event.toDay.toLocaleDateString()}
+                            </>
+                        }
                         {event.toTime &&
                             <>um {event.toTime} Uhr </>
                         }
+                        <br />
 
                         <strong>Kategorien :</strong>
                         {event.categories &&

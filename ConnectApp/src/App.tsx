@@ -53,7 +53,6 @@ const App: React.FC = () => {
   const [error, setError] = useState<string>("");
 
   const setLoadingState = (loading: boolean) => {
-    console.log("setLoadingState: " + loading);
     setLoading(loading);
   }
 

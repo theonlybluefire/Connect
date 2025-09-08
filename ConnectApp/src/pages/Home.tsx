@@ -60,7 +60,6 @@ const Home: React.FC<PagesProps> = ({ setLoading, auth, db, setError }) => {
   const filterCategorie = useRef<HTMLIonInputElement>(null);
   //temporary categories for demo purposes
   useEffect(() => {
-    console.log("test§)");
     getFirebaseData();
     setCategories(['Alle', 'Meetup', 'Sport', 'Tech', 'Kunst', 'Kino', 'Musik', 'Outdoor', 'Spiele', 'Bildung', 'Networking']);
   }, []);
@@ -132,6 +131,7 @@ const Home: React.FC<PagesProps> = ({ setLoading, auth, db, setError }) => {
         matches = matches && event.region?.toLowerCase().includes(region);
       }
       if (dateFrom && event.fromDay) {
+        console.log(dateFrom)
         matches = matches && event.fromDay >= dateFrom;
       }
       if (dateTo && event.toDay) {
@@ -152,6 +152,9 @@ const Home: React.FC<PagesProps> = ({ setLoading, auth, db, setError }) => {
     let tomorrow = new Date(today);
     tomorrow.setDate(tomorrow.getDate() + 1);
 
+    console.log("today: " + today);
+    console.log("tomorrow: " + tomorrow);
+
     const filteredEvents = events.current.filter((event) => {
       let matches = false;
 
@@ -159,12 +162,12 @@ const Home: React.FC<PagesProps> = ({ setLoading, auth, db, setError }) => {
         matches = matches && event.fromDay >= today;
       }
       if (event.toDay) {
-        matches = matches && event.toDay < tomorrow;
+        matches = matches && event.toDay <= tomorrow;
       }
 
       return matches;
     });
-    
+
     setcurrentEvents(filteredEvents);
 
     console.log(filteredEvents);

@@ -68,10 +68,12 @@ $('ul.veranstaltungen > li').each((i, el) => {
             toDay = null;
         }
 
-        fromDay = dates[0];
+        const [day, month, year] = dates[0].split(".");
+        fromDay = new Date(Number(year), Number(month) - 1, Number(day)).toISOString();
 
         if (dates.length > 1) {
-            toDay = dates[1];
+            const [day, month, year] = dates[1].split(".");
+            toDay = new Date(Number(year), Number(month) - 1, Number(day)).toISOString();
         } else {
             toDay = fromDay;
         }
