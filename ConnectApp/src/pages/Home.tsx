@@ -1,46 +1,38 @@
 import {
+  IonAvatar,
+  IonBadge,
+  IonButton,
+  IonButtons,
+  IonCard,
+  IonCardContent,
+  IonCardHeader,
+  IonCardSubtitle,
+  IonChip,
+  IonCol,
   IonContent,
   IonHeader,
-  IonPage,
-  IonTitle,
-  IonToolbar,
-  IonCard,
-  IonCardHeader,
-  IonCardTitle,
-  IonCardContent,
-  IonCardSubtitle,
-  IonSearchbar,
-  IonChip,
   IonIcon,
+  IonInput,
+  IonItem,
   IonLabel,
+  IonList,
+  IonModal,
+  IonPage,
   IonRefresher,
   IonRefresherContent,
-  IonAvatar,
   IonRow,
-  IonCol,
-  IonItem,
-  useIonRouter,
-  IonModal,
-  IonButtons,
-  IonButton,
-  IonInput,
-  IonList,
-  IonBadge,
+  IonSearchbar,
+  IonTitle,
+  IonToolbar,
+  useIonRouter
 } from '@ionic/react';
-import './Home.css';
-import Events from '../components/Events';
-import { use, useEffect, useRef, useState } from 'react';
-import { EventData } from '../models/EventData';
-import { connectToFirebase } from '../logic/ConnectToFirebase';
-import { FirebaseApp } from 'firebase/app';
-import { getFirestore, Firestore, getDocs, collection, DocumentData } from "firebase/firestore";
-import { PagesProps } from '../models/PagesProps';
-import { mapQueryToEventData } from '../logic/Mappings';
-import { Router } from 'react-router';
 import { filter } from 'ionicons/icons';
+import { useEffect, useRef, useState } from 'react';
+import Events from '../components/Events';
 import { getAvailableRegionNames, getEventData } from '../logic/FirestoreLogic';
-
-const DATA_COLLECTION = "com.data.events";
+import { EventData } from '../models/EventData';
+import { PagesProps } from '../models/PagesProps';
+import './Home.css';
 
 const Home: React.FC<PagesProps> = ({ setLoading, auth, db, setError }) => {
   const router = useIonRouter();
@@ -85,7 +77,6 @@ const Home: React.FC<PagesProps> = ({ setLoading, auth, db, setError }) => {
     setLoading(false);
   }
 
-
   //refresh handler
   const handleRefresh = (event: CustomEvent) => {
     console.log('Begin async operation');
@@ -121,7 +112,6 @@ const Home: React.FC<PagesProps> = ({ setLoading, auth, db, setError }) => {
 
     let categories: String[] = category.split(",");
 
-    debugger;
     (region || category || dateTo || dateFrom) ? setIsFilterSet(true) : setIsFilterSet(false);
 
     //filter events based on filters defined above
@@ -150,13 +140,10 @@ const Home: React.FC<PagesProps> = ({ setLoading, auth, db, setError }) => {
     today.setHours(0, 0, 0, 0);
 
     let tomorrow = new Date(today);
-    tomorrow.setDate(tomorrow.getDate() + 1);
-
-    console.log("today: " + today);
-    console.log("tomorrow: " + tomorrow);
+    tomorrow.setDate(tomorrow.getDate() +1);
 
     const filteredEvents = events.current.filter((event) => {
-      let matches = false;
+      let matches = true;
 
       if (event.fromDay) {
         matches = matches && event.fromDay >= today;
@@ -164,7 +151,7 @@ const Home: React.FC<PagesProps> = ({ setLoading, auth, db, setError }) => {
       if (event.toDay) {
         matches = matches && event.toDay <= tomorrow;
       }
-
+      
       return matches;
     });
 
