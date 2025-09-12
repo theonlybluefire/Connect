@@ -52,14 +52,15 @@ const Home: React.FC<PagesProps> = ({ setLoading, auth, db, setError }) => {
   const filterCategorie = useRef<HTMLIonInputElement>(null);
   //temporary categories for demo purposes
   useEffect(() => {
-    getFirebaseData();
+    setLoading(true);
+    getFirebaseData().then(() => setLoading(false));
+
     setCategories(['Alle', 'Meetup', 'Sport', 'Tech', 'Kunst', 'Kino', 'Musik', 'Outdoor', 'Spiele', 'Bildung', 'Networking']);
   }, []);
 
   //get data
   const getFirebaseData = async () => {
-
-    setLoading(true);
+    console.info("Getting event data");
 
     try {
       //get events
@@ -69,22 +70,17 @@ const Home: React.FC<PagesProps> = ({ setLoading, auth, db, setError }) => {
       setRegions(await getAvailableRegionNames(db));
     }
     catch (e) {
-      setError("Fehler beim Laden der Ereignisse: " + e);
+      setError("Error while loading events: " + e);
     }
 
     setcurrentEvents(events.current);
 
-    setLoading(false);
+    console.info("Finished getting event data");
   }
 
   //refresh handler
   const handleRefresh = (event: CustomEvent) => {
-    console.log('Begin async operation');
-
-    setTimeout(() => {
-      console.log('Async operation has ended');
-      event.detail.complete();
-    }, 2000);
+    getFirebaseData().then(() => event.detail.complete());
   };
 
   const searchEventList = () => {
