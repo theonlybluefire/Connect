@@ -1,0 +1,17 @@
+{
+    "title": "Scrape Data from Biberach Website",
+    "type": "object",
+    "schemaVersion": 1,
+    "properties": {
+        "url": {
+            "title": "URL of the page",
+            "type": "string",
+            "description": "URL of biberach event website",
+            "editor": "textfield",
+            "prefill": ""
+        }
+    },
+    "required": [
+        "url"
+    ]
+}

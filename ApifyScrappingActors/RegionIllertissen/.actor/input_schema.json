@@ -1,0 +1,17 @@
+{
+    "title": "Scrape Data from Illertissen Website",
+    "type": "object",
+    "schemaVersion": 1,
+    "properties": {
+        "url": {
+            "title": "URL of the page",
+            "type": "string",
+            "description": "URL of illertissen event website",
+            "editor": "textfield",
+            "prefill": ""
+        }
+    },
+    "required": [
+        "url"
+    ]
+}

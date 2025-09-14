@@ -36,57 +36,39 @@ const events = [];
 const uploadPromises = [];
 
 // delete previos data
-const snapshot = await db.collection('com.data.events').where('region', '==', 'biberach').get();
+const snapshot = await db.collection('com.data.events').where('region', '==', 'illertissen').get();
 const deletePromises = [];
 snapshot.forEach(doc => {
     deletePromises.push(doc.ref.delete());
 });
 if (deletePromises.length > 0) { //if matching documents found
     await Promise.all(deletePromises);
-    console.log(`${deletePromises.length} documents with region "biberach" deleted.`);
+    console.log(`${deletePromises.length} documents with region "illertissen" deleted.`);
 } else {
-    console.log('No documents with region "biberach" found to delete.');
+    console.log('No documents with region "illertissen" found to delete.');
 }
 
 
-$('ul.veranstaltungen > li').each((i, el) => {
-    let fromDay = null;
-    let toDay = null;
+$('div.c7-calendar-classic-event-view > c7-row').each((i, el) => {
+    let fromDay = "";
+    let toDay = "";
 
-    const eventData = $(el).find("div > div > div");
+    const eventData = $(el).querySelectorAll("c7-row-container")[1];
 
-    const timeText = eventData.find("p > time").text().trim();
+    const timeText = eventData.querySelector("div.c7-part span.c7-part:nth-of-type(2)").textContent.trim() +
+        eventData.querySelector("div.c7-part:nth-of-type(2) span.c7-part:nth-of-type(2)").textContent.trim();
 
     //format time text
-    if (timeText.includes("Datum: ")) {
-        const dateRegex = /(\d{2}\.\d{2}\.\d{4})/g;
-
-        const dates = timeText.match(dateRegex);
-
-        if (!dates) {
-            fromDay = null;
-            toDay = null;
-        }
-
-        const [day, month, year] = dates[0].split(".");
-        fromDay = new Date(Number(year), Number(month) - 1, Number(day)).toISOString();
-
-        if (dates.length > 1) {
-            const [day, month, year] = dates[1].split(".");
-            toDay = new Date(Number(year), Number(month) - 1, Number(day)).toISOString();
-        } else {
-            toDay = fromDay;
-        }
-    }
+    //TODO: implement date parsing for illertissen
 
     const event = {
-        name: eventData.find("h3").text().trim(),
-        description: eventData.find("p:not([class])").text().trim(),
+        name: eventData.querySelector("c7-row-header c7-row-title").textContent.trim(),
+        description: "",
         added: new Date().toISOString(),
         timeText: timeText,
         fromDay: fromDay,
         toDay: toDay,
-        region: "biberach"
+        region: "illertissen"
     };
 
     // upload to firestore und verifiziere Upload
