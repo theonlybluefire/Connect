@@ -46,10 +46,12 @@ const Home: React.FC<PagesProps> = ({ setLoading, auth, db, setError }) => {
 
   //filter
   const [isFilterSet, setIsFilterSet] = useState<boolean>(false);
+  const [fastFilter, setFastFilter] = useState<number>(0); //0 = no filter, 1 = todays fast filter, above = category filter in order
   const filterRegion = useRef<HTMLIonInputElement>(null);
   const filterDateFrom = useRef<HTMLIonInputElement>(null);
   const filterDateTo = useRef<HTMLIonInputElement>(null);
   const filterCategorie = useRef<HTMLIonInputElement>(null);
+
   //temporary categories for demo purposes
   useEffect(() => {
     setLoading(true);
@@ -132,6 +134,13 @@ const Home: React.FC<PagesProps> = ({ setLoading, auth, db, setError }) => {
   }
 
   const handleTodayFastFilter = () => {
+    if(fastFilter == 1){ //reset filter
+      setcurrentEvents(events.current);
+      setIsFilterSet(false);
+      setFastFilter(0);
+      return;
+    }
+
     let today = new Date();
     today.setHours(0, 0, 0, 0);
 
@@ -155,7 +164,7 @@ const Home: React.FC<PagesProps> = ({ setLoading, auth, db, setError }) => {
 
     console.log(filteredEvents);
 
-    setIsFilterSet(true);
+    setFastFilter(1);
   }
 
 
@@ -199,7 +208,7 @@ const Home: React.FC<PagesProps> = ({ setLoading, auth, db, setError }) => {
             whiteSpace: 'nowrap',
           }}
         >
-          <IonChip onClick={handleTodayFastFilter} color={'primary'} mode='ios' style={{ flex: '0 0 auto', marginLeft: '8px' }}>
+          <IonChip className={fastFilter == 1 ? "animated-gradient" : "" } onClick={handleTodayFastFilter} color={fastFilter == 1 ? "" : "primary" } mode='ios' style={{ flex: '0 0 auto', marginLeft: '8px' }}>
             <IonLabel>Heute</IonLabel>
           </IonChip>
           {categories.map((label, idx) => (
