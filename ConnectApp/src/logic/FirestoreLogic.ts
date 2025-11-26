@@ -1,28 +1,67 @@
-import { getDocs, collection, Firestore } from "firebase/firestore";
+import { Firestore } from "firebase/firestore";
 import { EventData } from "../models/EventData";
-import { mapQueryToAvailableRegions, mapQueryToEventData } from "./Mappings";
+import { RegionData } from "../models/RegionData";
+import { FirestoreService } from "../services/FirebaseService";
 
 export const EVENT_DATA_COLLECTION = "com.data.events";
 export const REGION_DATA_COLLECTION = "com.configs.availableRegions";
 
-export const getEventData = async (db: Firestore): Promise<EventData[]> => {
-    let eventsList: EventData[] = [];
+export const getEventData = async (): Promise<EventData[]> => {
+  return await FirestoreService.getFirestoreCollection<EventData>(
+    EVENT_DATA_COLLECTION,
+    (querySnapshot) => {
+      let events: EventData[] = [];
+      querySnapshot.forEach((doc) => {
+        const data = doc.data();
+        events.push(
+          new EventData(
+            data.name,
+            data.description,
+            data.region,
+            data.added,
+            data.timeText,
+            data.fromDay ? new Date(data.fromDay) : undefined,
+            data.toDay ? new Date(data.toDay) : undefined
+          )
+        );
+      });
+      return events;
+    }
+  );
+};
 
-    const querySnapshot = await getDocs(collection(db, EVENT_DATA_COLLECTION));
-    querySnapshot.forEach((doc) => {
-      eventsList.push(mapQueryToEventData(doc.data()));
-    });
+export const getRegionData = async (): Promise<RegionData[]> => {
+  return FirestoreService.getFirestoreCollection<RegionData>(
+    REGION_DATA_COLLECTION,
+    (querySnapshot) => {
+      let regions: RegionData[] = [];
 
-    return eventsList;
-}
+      querySnapshot.forEach((doc) => {
+        regions.push(
+          new RegionData(
+            doc.data().regionId,
+            doc.data().regionDescription,
+            doc.data().regionStatus
+          )
+        );
+      });
+      return regions;
+    }
+  );
+};
 
-export const getAvailableRegionNames = async (db: Firestore): Promise<string[]> => {
-    let regions: string[] = [];
-
-    const querySnapshot = await getDocs(collection(db, REGION_DATA_COLLECTION));
-    mapQueryToAvailableRegions(querySnapshot).forEach((region) => {
-        regions.push(region.regionDescription);
-    });
-
-    return regions;
-}
+export const getCategoryNames = async (db: Firestore): Promise<string[]> => {
+  return FirestoreService.getFirestoreCollection<string>(
+    EVENT_DATA_COLLECTION,
+    (querySnapshot) => {
+      let categoriesSet: Set<string> = new Set<string>();
+      querySnapshot.forEach((doc) => {
+        const data = doc.data();
+        if (data.categories && Array.isArray(data.categories)) {
+          data.categories.forEach((cat: string) => categoriesSet.add(cat));
+        }
+      });
+      return Array.from(categoriesSet);
+    }
+  );
+};

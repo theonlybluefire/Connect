@@ -1,0 +1,12 @@
+body {
+  --ion-item-background: none;
+}
+
+ion-list {
+  background-color: none;
+  padding-top: 0px;
+}
+
+ion-card {
+  width: 100%;
+}

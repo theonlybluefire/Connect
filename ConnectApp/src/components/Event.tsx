@@ -1,0 +1,93 @@
+import {
+  IonCard,
+  IonCardContent,
+  IonCardHeader,
+  IonCardSubtitle,
+  IonCardTitle,
+  IonChip,
+  IonIcon,
+  IonItem,
+  IonItemOption,
+  IonItemOptions,
+  IonItemSliding,
+  IonLabel,
+  IonList,
+} from "@ionic/react";
+import { map } from "ionicons/icons";
+import { EventData } from "../models/EventData";
+import "./Events.css";
+
+type EventsProps = {
+  events: EventData[];
+};
+
+const Events: React.FC<EventsProps> = ({ events }) => {
+  return (
+    <IonList lines="none">
+      {events.map((event, idx) => (
+        <IonItemSliding>
+          <IonItem
+            style={{
+              width: "100%",
+              padding: "0px",
+              margin: "0px",
+            }}
+          >
+            <IonCard
+              color={"light"}
+              mode="ios"
+              key={event.name + event.added + idx}
+              style={{ width: "100%" }}
+            >
+              <IonCardHeader>
+                <IonCardTitle>{event.name}</IonCardTitle>
+                <IonCardSubtitle>
+                  <IonChip>
+                    <IonIcon icon={map} color="primary"></IonIcon>
+                    <IonLabel>{event.region}</IonLabel>
+                  </IonChip>
+                </IonCardSubtitle>
+              </IonCardHeader>
+              <IonCardContent>
+                {event.timeText && !event.fromDay && !event.toDay && (
+                  <p>{event.timeText}</p>
+                )}
+                {event.fromDay && (
+                  <>
+                    <strong>Von: </strong>
+                    {event.fromDay.toLocaleDateString()}
+                  </>
+                )}
+                {event.fromTime && <>um {event.fromTime} Uhr </>}
+                <br />
+
+                {event.toDay && (
+                  <>
+                    <strong>Bis: </strong>
+                    {event.toDay.toLocaleDateString()}
+                  </>
+                )}
+                {event.toTime && <>um {event.toTime} Uhr </>}
+                <br />
+
+                <strong>Kategorien :</strong>
+                {event.categories &&
+                  event.categories.map((occ, idx) => (
+                    <IonChip outline={true} mode="ios" key={idx}>
+                      <IonLabel>{occ}</IonLabel>
+                    </IonChip>
+                  ))}
+                <p style={{ marginTop: "0.5em" }}>{event.description}</p>
+              </IonCardContent>
+            </IonCard>
+          </IonItem>
+          <IonItemOptions>
+            <IonItemOption expandable>Merken</IonItemOption>
+          </IonItemOptions>
+        </IonItemSliding>
+      ))}
+    </IonList>
+  );
+};
+
+export default Events;
