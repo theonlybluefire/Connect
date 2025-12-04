@@ -20,9 +20,7 @@ const Login: React.FC<PagesProps> = ({ setError }) => {
   const handleLogin = async () => {
     try {
       await UserService.login(email, password);
-    } catch (error: unknown) {
-      error instanceof Error && setError(error.message.toString());
-    }
+    } catch (error: unknown) {}
   };
 
   return (
