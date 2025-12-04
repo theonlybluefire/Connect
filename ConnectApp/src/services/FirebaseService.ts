@@ -22,20 +22,16 @@ export interface IFirebaseService {
 
 export class UserService {
   public static async login(email: string, password: string) {
-    try {
-      const userCredential = await signInWithEmailAndPassword(
-        FirebaseService.Instance.auth,
-        email,
-        password
-      );
+    const userCredential = await signInWithEmailAndPassword(
+      FirebaseService.Instance.auth,
+      email,
+      password
+    );
 
-      console.info(
-        "UserService: User logged in successfully! User: ",
-        userCredential.user
-      );
-    } catch (error) {
-      console.error("UserService: Error while loggin in! Error:", error);
-    }
+    console.info(
+      "UserService: User logged in successfully! User: ",
+      userCredential.user
+    );
   }
 
   public static subscribeToUserData(onDataChange: (data: any) => void) {
@@ -59,6 +55,10 @@ export class UserService {
       console.debug("UserService: Auth state changed. New user: ", user);
       onStateChange(user);
     });
+  }
+
+  public static signOut() {
+    FirebaseService.Instance.auth.signOut();
   }
 }
 

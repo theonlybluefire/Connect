@@ -1,30 +1,25 @@
 import {
-  IonContent,
-  IonHeader,
-  IonPage,
-  IonInput,
   IonButton,
-  IonItem,
-  IonLabel,
   IonCard,
   IonCardContent,
-} from '@ionic/react';
-import { useState } from 'react';
-import './Login.css';
-import { PagesProps } from '../models/PagesProps';
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+  IonContent,
+  IonHeader,
+  IonInput,
+  IonItem,
+  IonPage,
+} from "@ionic/react";
+import { useState } from "react";
+import { PagesProps } from "../models/PagesProps";
+import { UserService } from "../services/FirebaseService";
+import "./Login.css";
 
-
-const Login: React.FC<PagesProps> = ({ app, setError }) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+const Login: React.FC<PagesProps> = ({ setError }) => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const handleLogin = async () => {
-    const auth = getAuth(app);
     try {
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      const user = userCredential.user;
-      console.log("Angemeldet als:", user.email);
+      await UserService.login(email, password);
     } catch (error: unknown) {
       error instanceof Error && setError(error.message.toString());
     }
@@ -32,41 +27,44 @@ const Login: React.FC<PagesProps> = ({ app, setError }) => {
 
   return (
     <IonPage>
-      <IonHeader>
-      </IonHeader>
+      <IonHeader></IonHeader>
       <IonContent fullscreen className="ion-padding">
-        <IonCard mode='ios'>
-          <IonCardContent mode='ios'>
-            <IonItem mode='ios'>
+        <IonCard mode="ios">
+          <IonCardContent mode="ios">
+            <IonItem mode="ios">
               <IonInput
-                mode='ios'
+                mode="ios"
                 type="email"
                 fill="solid"
                 label="E-Mail "
                 labelPlacement="floating"
                 value={email}
-                onIonChange={e => setEmail(e.detail.value!)}
+                onIonChange={(e) => setEmail(e.detail.value!)}
                 required
               ></IonInput>
             </IonItem>
-            <IonItem mode='ios'>
+            <IonItem mode="ios">
               <IonInput
-                mode='ios'
+                mode="ios"
                 type="password"
                 fill="solid"
                 label="Passwort"
                 labelPlacement="floating"
                 value={password}
-                onIonChange={e => setPassword(e.detail.value!)}
+                onIonChange={(e) => setPassword(e.detail.value!)}
                 required
               ></IonInput>
             </IonItem>
-            <IonButton mode='ios' expand="block" className="ion-margin-top" onClick={handleLogin}>
+            <IonButton
+              mode="ios"
+              expand="block"
+              className="ion-margin-top"
+              onClick={handleLogin}
+            >
               Login
             </IonButton>
           </IonCardContent>
         </IonCard>
-
       </IonContent>
     </IonPage>
   );

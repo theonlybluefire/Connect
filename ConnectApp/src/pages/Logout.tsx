@@ -1,20 +1,19 @@
-import {
-  IonContent,
-  IonHeader,
-  IonPage,
-  IonButton,
-} from '@ionic/react';
-import './Login.css';
-import { PagesProps } from '../models/PagesProps';
+import { IonButton, IonContent, IonHeader, IonPage } from "@ionic/react";
+import { PagesProps } from "../models/PagesProps";
+import { UserService } from "../services/FirebaseService";
+import "./Login.css";
 
-const Logout: React.FC<PagesProps> = ({ app , auth}) => {
-
+const Logout: React.FC<PagesProps> = () => {
   return (
     <IonPage>
-      <IonHeader>
-      </IonHeader>
+      <IonHeader></IonHeader>
       <IonContent fullscreen className="ion-padding">
-        <IonButton mode='ios' expand="block" className="ion-margin-top" onClick={() => auth.signOut()}>
+        <IonButton
+          mode="ios"
+          expand="block"
+          className="ion-margin-top"
+          onClick={() => UserService.signOut()}
+        >
           Logout
         </IonButton>
       </IonContent>
