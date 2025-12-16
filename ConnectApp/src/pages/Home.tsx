@@ -28,9 +28,8 @@ import {
 } from "@ionic/react";
 import { filter } from "ionicons/icons";
 import { useEffect, useRef, useState } from "react";
-import Events from "../components/Events";
-//import { getAvailableRegionNames, getEventData } from "../logic/FirestoreLogic";
-import { getEventData } from "../logic/FirestoreLogic";
+import Events from "../components/Events/Events";
+import { getCategoryNames, getEventData } from "../logic/FirestoreLogic";
 import { EventData } from "../models/EventData";
 import { PagesProps } from "../models/PagesProps";
 import { FirebaseService } from "../services/FirebaseService";
@@ -39,7 +38,7 @@ import "./Home.css";
 const Home: React.FC<PagesProps> = ({ setLoading, setError }) => {
   const router = useIonRouter();
 
-  const [currentEvents, setcurrentEvents] = useState<EventData[]>([]);
+  const [currentEvents, setCurrentEvents] = useState<EventData[]>([]);
   const [categories, setCategories] = useState<string[]>([]);
   const [regions, setRegions] = useState<string[]>([]);
   const events = useRef<EventData[]>([]);
@@ -58,20 +57,6 @@ const Home: React.FC<PagesProps> = ({ setLoading, setError }) => {
   useEffect(() => {
     setLoading(true);
     getFirebaseData().then(() => setLoading(false));
-
-    setCategories([
-      "Alle",
-      "Meetup",
-      "Sport",
-      "Tech",
-      "Kunst",
-      "Kino",
-      "Musik",
-      "Outdoor",
-      "Spiele",
-      "Bildung",
-      "Networking",
-    ]);
   }, []);
 
   //get data
@@ -81,14 +66,12 @@ const Home: React.FC<PagesProps> = ({ setLoading, setError }) => {
     try {
       //get events
       events.current = await getEventData();
-
-      //get available region ids
-      //setRegions(await getAvailableRegionNames(db));
+      setCategories(await getCategoryNames());
     } catch (e) {
       setError("Error while loading events: " + e);
     }
 
-    setcurrentEvents(events.current);
+    setCurrentEvents(events.current);
 
     console.info("Finished getting event data");
   };
@@ -113,7 +96,7 @@ const Home: React.FC<PagesProps> = ({ setLoading, setError }) => {
             event.categories.some((cat) => cat.toLowerCase().includes(query)))
         );
       });
-      setcurrentEvents(filteredEvents);
+      setCurrentEvents(filteredEvents);
     }
   };
 
@@ -135,7 +118,6 @@ const Home: React.FC<PagesProps> = ({ setLoading, setError }) => {
       ? setIsFilterSet(true)
       : setIsFilterSet(false);
 
-    //filter events based on filters defined above
     const filteredEvents = events.current.filter((event) => {
       let matches = true;
       if (region) {
@@ -156,13 +138,13 @@ const Home: React.FC<PagesProps> = ({ setLoading, setError }) => {
       }
       return matches;
     });
-    setcurrentEvents(filteredEvents);
+    setCurrentEvents(filteredEvents);
   };
 
   const handleTodayFastFilter = () => {
     if (fastFilter == 1) {
       //reset filter
-      setcurrentEvents(events.current);
+      setCurrentEvents(events.current);
       setIsFilterSet(false);
       setFastFilter(0);
       return;
@@ -187,9 +169,7 @@ const Home: React.FC<PagesProps> = ({ setLoading, setError }) => {
       return matches;
     });
 
-    setcurrentEvents(filteredEvents);
-
-    console.log(filteredEvents);
+    setCurrentEvents(filteredEvents);
 
     setFastFilter(1);
   };

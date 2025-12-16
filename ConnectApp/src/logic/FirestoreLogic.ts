@@ -1,14 +1,10 @@
-import { Firestore } from "firebase/firestore";
+import { COLLECTIONS } from "../constants";
 import { EventData } from "../models/EventData";
 import { RegionData } from "../models/RegionData";
 import { FirestoreService } from "../services/FirebaseService";
-
-export const EVENT_DATA_COLLECTION = "com.data.events";
-export const REGION_DATA_COLLECTION = "com.configs.availableRegions";
-
 export const getEventData = async (): Promise<EventData[]> => {
   return await FirestoreService.getFirestoreCollection<EventData>(
-    EVENT_DATA_COLLECTION,
+    COLLECTIONS.EVENTS,
     (querySnapshot) => {
       let events: EventData[] = [];
       querySnapshot.forEach((doc) => {
@@ -32,7 +28,7 @@ export const getEventData = async (): Promise<EventData[]> => {
 
 export const getRegionData = async (): Promise<RegionData[]> => {
   return FirestoreService.getFirestoreCollection<RegionData>(
-    REGION_DATA_COLLECTION,
+    COLLECTIONS.REGIONS,
     (querySnapshot) => {
       let regions: RegionData[] = [];
 
@@ -50,9 +46,9 @@ export const getRegionData = async (): Promise<RegionData[]> => {
   );
 };
 
-export const getCategoryNames = async (db: Firestore): Promise<string[]> => {
+export const getCategoryNames = async (): Promise<string[]> => {
   return FirestoreService.getFirestoreCollection<string>(
-    EVENT_DATA_COLLECTION,
+    COLLECTIONS.EVENTS,
     (querySnapshot) => {
       let categoriesSet: Set<string> = new Set<string>();
       querySnapshot.forEach((doc) => {

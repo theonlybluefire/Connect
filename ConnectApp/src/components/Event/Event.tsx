@@ -14,8 +14,7 @@ import {
   IonList,
 } from "@ionic/react";
 import { map } from "ionicons/icons";
-import { EventData } from "../models/EventData";
-import "./Events.css";
+import { EventData } from "../../models/EventData";
 
 type EventsProps = {
   events: EventData[];

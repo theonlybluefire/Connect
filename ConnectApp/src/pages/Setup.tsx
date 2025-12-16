@@ -82,7 +82,11 @@ const Setup: React.FC<PagesProps> = ({ setLoading, setError }) => {
             <IonCardTitle style={{ marginTop: 8 }}>
               {user?.displayName || user?.email}
             </IonCardTitle>
-            <IonCardSubtitle>Hier siehst du dein Profil ...</IonCardSubtitle>
+            <IonCardSubtitle>
+              <IonButton fill="clear" color="danger" routerLink="/logout">
+                Ausloggen
+              </IonButton>
+            </IonCardSubtitle>
           </IonCardHeader>
           <IonCardContent>
             <IonList inset>

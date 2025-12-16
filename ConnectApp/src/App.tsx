@@ -39,6 +39,7 @@ import "@ionic/react/css/palettes/dark.system.css";
 /* Theme variables */
 import { useState } from "react";
 //import { connectToFirebase } from "./logic/ConnectToFirebase";
+import { LoginState } from "./enums";
 import Login from "./pages/Login";
 import Logout from "./pages/Logout";
 import Setup from "./pages/Setup";
@@ -48,7 +49,7 @@ import "./theme/variables.css";
 setupIonicReact();
 
 const App: React.FC = () => {
-  const [loggedIn, setLoggedIn] = useState<number>(-1); //def. loading
+  const [loginState, setLoginState] = useState<LoginState>(LoginState.LOADING); //def. loading
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
 
@@ -59,16 +60,17 @@ const App: React.FC = () => {
   UserService.subscribeToLoginState((data) => {
     if (data) {
       console.debug("App: User is logged in.");
-      setLoggedIn(1);
+      setLoginState(LoginState.LOGGED_IN);
     } else {
       console.debug("App: User is logged out.");
-      setLoggedIn(0);
+      setLoginState(LoginState.LOGGED_OUT);
     }
   });
 
   return (
     <IonApp>
-      {loggedIn === -1 || (loading && <IonLoading mode="ios" isOpen={true} />)}
+      {loginState === LoginState.LOADING ||
+        (loading && <IonLoading mode="ios" isOpen={true} />)}
 
       {error !== "" && (
         <IonAlert
@@ -85,25 +87,25 @@ const App: React.FC = () => {
       <IonReactRouter>
         <IonRouterOutlet>
           <Route exact path="/home">
-            {loggedIn === 1 && (
+            {loginState === LoginState.LOGGED_IN && (
               <Home setError={setError} setLoading={setLoadingState} />
             )}
-            {loggedIn === 0 && <Redirect to="/login" />}
+            {loginState === LoginState.LOGGED_OUT && <Redirect to="/login" />}
           </Route>
           <Route exact path="/">
             <Redirect to="/home" />
           </Route>
           <Route exact path="/login">
-            {loggedIn === 1 && <Redirect to="/home" />}
-            {loggedIn === 0 && (
+            {loginState === LoginState.LOGGED_IN && <Redirect to="/home" />}
+            {loginState === LoginState.LOGGED_OUT && (
               <Login setError={setError} setLoading={setLoadingState} />
             )}
           </Route>
           <Route exact path="/logout">
-            {loggedIn === 1 && (
+            {loginState === LoginState.LOGGED_IN && (
               <Logout setError={setError} setLoading={setLoadingState} />
             )}
-            {loggedIn === 0 && <Redirect to="/login" />}
+            {loginState === LoginState.LOGGED_OUT && <Redirect to="/login" />}
           </Route>
           <Route exact path="/setup">
             <Setup setError={setError} setLoading={setLoadingState} />
