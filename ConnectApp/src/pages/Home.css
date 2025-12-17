@@ -1,5 +1,10 @@
 ion-chip.animated-gradient {
-  --background: linear-gradient(-45deg, var(--ion-color-primary), var(--ion-color-secondary), var(--ion-color-tertiary));;
+  --background: linear-gradient(
+    -45deg,
+    var(--ion-color-primary),
+    var(--ion-color-secondary),
+    var(--ion-color-tertiary)
+  );
   background-size: 400% 400%;
   animation: gradient-bg 3s ease-in-out infinite;
 }

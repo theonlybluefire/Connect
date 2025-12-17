@@ -10,6 +10,7 @@ import {
 } from "@ionic/react";
 
 import { map } from "ionicons/icons";
+import { useTranslation } from "react-i18next";
 import { EventData } from "../../models/EventData";
 
 type EventsProps = {
@@ -17,6 +18,8 @@ type EventsProps = {
 };
 
 const Events: React.FC<EventsProps> = ({ events }) => {
+  const { t } = useTranslation();
+
   return (
     <>
       {events.map((event, idx) => (
@@ -36,23 +39,27 @@ const Events: React.FC<EventsProps> = ({ events }) => {
             )}
             {event.fromDay && (
               <>
-                <strong>Von: </strong>
+                <strong>{t("events.from")}: </strong>
                 {event.fromDay.toLocaleDateString()}
               </>
             )}
-            {event.fromTime && <>um {event.fromTime} Uhr </>}
+            {event.fromTime && (
+              <>
+                {t("events.at")} {event.fromTime} {t("event.time")}{" "}
+              </>
+            )}
             <br />
 
             {event.toDay && (
               <>
-                <strong>Bis: </strong>
+                <strong>{t("events.to")}: </strong>
                 {event.toDay.toLocaleDateString()}
               </>
             )}
             {event.toTime && <>um {event.toTime} Uhr </>}
             <br />
 
-            <strong>Kategorien :</strong>
+            <strong>{t("event.categories")}: </strong>
             {event.categories &&
               event.categories.map((occ, idx) => (
                 <IonChip outline={true} mode="ios" key={idx}>

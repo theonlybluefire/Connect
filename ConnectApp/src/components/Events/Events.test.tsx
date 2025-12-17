@@ -1,7 +1,7 @@
 import "@testing-library/jest-dom";
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import Events from "../Event/Event";
+import Events from "../Events/Events";
 
 describe("Events", () => {
   const sampleEvents = [

@@ -39,6 +39,8 @@ import "@ionic/react/css/palettes/dark.system.css";
 /* Theme variables */
 import { useState } from "react";
 //import { connectToFirebase } from "./logic/ConnectToFirebase";
+import { useTranslation } from "react-i18next";
+import "./App.css";
 import { LoginState } from "./enums";
 import Login from "./pages/Login";
 import Logout from "./pages/Logout";
@@ -49,7 +51,8 @@ import "./theme/variables.css";
 setupIonicReact();
 
 const App: React.FC = () => {
-  const [loginState, setLoginState] = useState<LoginState>(LoginState.LOADING); //def. loading
+  const [t] = useTranslation();
+  const [loginState, setLoginState] = useState<LoginState>(LoginState.LOADING);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
 
@@ -76,12 +79,12 @@ const App: React.FC = () => {
         <IonAlert
           mode="ios"
           isOpen={error !== ""}
-          header="Fehler"
-          subHeader="Ein Fehler ist aufgetreten"
+          header={t("app.errorHeader")}
+          subHeader={t("app.errorSubHeader")}
           message={error}
-          buttons={["OK"]}
+          buttons={[t("app.ok")]}
           onDidDismiss={() => setError("")}
-        ></IonAlert>
+        />
       )}
 
       <IonReactRouter>

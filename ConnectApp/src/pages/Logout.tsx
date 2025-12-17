@@ -1,9 +1,12 @@
 import { IonButton, IonContent, IonHeader, IonPage } from "@ionic/react";
+import { useTranslation } from "react-i18next";
 import { PagesProps } from "../models/PagesProps";
 import { UserService } from "../services/FirebaseService";
 import "./Login.css";
 
 const Logout: React.FC<PagesProps> = () => {
+  const { t } = useTranslation();
+
   return (
     <IonPage>
       <IonHeader></IonHeader>
@@ -14,7 +17,7 @@ const Logout: React.FC<PagesProps> = () => {
           className="ion-margin-top"
           onClick={() => UserService.signOut()}
         >
-          Logout
+          {t("button.logout")}
         </IonButton>
       </IonContent>
     </IonPage>

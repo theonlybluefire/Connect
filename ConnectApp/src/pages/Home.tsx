@@ -28,6 +28,7 @@ import {
 } from "@ionic/react";
 import { filter } from "ionicons/icons";
 import { useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import Events from "../components/Events/Events";
 import { getCategoryNames, getEventData } from "../logic/FirestoreLogic";
 import { EventData } from "../models/EventData";
@@ -37,6 +38,7 @@ import "./Home.css";
 
 const Home: React.FC<PagesProps> = ({ setLoading, setError }) => {
   const router = useIonRouter();
+  const { t } = useTranslation();
 
   const [currentEvents, setCurrentEvents] = useState<EventData[]>([]);
   const [categories, setCategories] = useState<string[]>([]);
@@ -61,8 +63,6 @@ const Home: React.FC<PagesProps> = ({ setLoading, setError }) => {
 
   //get data
   const getFirebaseData = async () => {
-    console.info("Getting event data");
-
     try {
       //get events
       events.current = await getEventData();
@@ -72,8 +72,6 @@ const Home: React.FC<PagesProps> = ({ setLoading, setError }) => {
     }
 
     setCurrentEvents(events.current);
-
-    console.info("Finished getting event data");
   };
 
   //refresh handler
@@ -201,7 +199,7 @@ const Home: React.FC<PagesProps> = ({ setLoading, setError }) => {
               onKeyDown={searchEventList}
               mode="ios"
               animated={true}
-              placeholder="Nach Ereignissen suchen ..."
+              placeholder={t("placeholders.search")}
             ></IonSearchbar>
           </IonCol>
           <IonCol size="auto">
@@ -211,7 +209,6 @@ const Home: React.FC<PagesProps> = ({ setLoading, setError }) => {
             </IonButton>
           </IonCol>
         </IonRow>
-
         <div
           style={{
             display: "flex",
@@ -228,7 +225,7 @@ const Home: React.FC<PagesProps> = ({ setLoading, setError }) => {
             mode="ios"
             style={{ flex: "0 0 auto", marginLeft: "8px" }}
           >
-            <IonLabel>Heute</IonLabel>
+            <IonLabel>{t("label.today")}</IonLabel>
           </IonChip>
           {categories.map((label, idx) => (
             <IonChip mode="ios" key={idx} style={{ flex: "0 0 auto" }}>
@@ -241,7 +238,6 @@ const Home: React.FC<PagesProps> = ({ setLoading, setError }) => {
         <IonRefresher slot="fixed" onIonRefresh={handleRefresh}>
           <IonRefresherContent></IonRefresherContent>
         </IonRefresher>
-
         <IonCard mode="ios" color="primary">
           <IonCardHeader>
             <IonCardSubtitle>Aktivität von Freunden </IonCardSubtitle>
@@ -250,9 +246,7 @@ const Home: React.FC<PagesProps> = ({ setLoading, setError }) => {
             <p>Cooming soon</p>
           </IonCardContent>
         </IonCard>
-
         <Events events={currentEvents} />
-
         <IonModal mode="ios" ref={filterModal} trigger="open-filter-modal">
           <IonHeader>
             <IonToolbar>
@@ -266,7 +260,7 @@ const Home: React.FC<PagesProps> = ({ setLoading, setError }) => {
                     filterModal.current?.dismiss();
                   }}
                 >
-                  bestätigen
+                  {t("button.confirm")}
                 </IonButton>
               </IonButtons>
             </IonToolbar>
@@ -274,7 +268,7 @@ const Home: React.FC<PagesProps> = ({ setLoading, setError }) => {
           <IonContent className="ion-padding">
             <IonList mode="ios">
               <IonItem>
-                <IonLabel position="stacked">Region</IonLabel>
+                <IonLabel position="stacked">{t("label.region")}</IonLabel>
                 <IonInput
                   ref={filterRegion}
                   value={filterRegion.current?.value}
@@ -282,29 +276,33 @@ const Home: React.FC<PagesProps> = ({ setLoading, setError }) => {
                 ></IonInput>
               </IonItem>
               <IonItem>
-                <IonLabel position="stacked">Datum von</IonLabel>
+                <IonLabel position="stacked">
+                  {t("label.date")} {t("event.from")}
+                </IonLabel>
                 <IonInput
                   ref={filterDateFrom}
                   value={filterDateFrom.current?.value}
                   type="date"
-                  placeholder="Datum von"
+                  placeholder={t("label.date") + " " + t("event.from")}
                 ></IonInput>
               </IonItem>
               <IonItem>
-                <IonLabel position="stacked">Datum bis</IonLabel>
+                <IonLabel position="stacked">
+                  {t("label.date")} {t("event.to")}
+                </IonLabel>
                 <IonInput
                   ref={filterDateTo}
                   value={filterDateTo.current?.value}
                   type="date"
-                  placeholder="Datum bis"
+                  placeholder={t("label.date") + " " + t("event.to")}
                 ></IonInput>
               </IonItem>
               <IonItem>
-                <IonLabel position="stacked">Kategorie</IonLabel>
+                <IonLabel position="stacked">{t("event.categories")}</IonLabel>
                 <IonInput
                   ref={filterCategorie}
                   value={filterCategorie.current?.value}
-                  placeholder="nach Kategorien suchen"
+                  placeholder={t("placeholders.search")}
                 ></IonInput>
               </IonItem>
             </IonList>

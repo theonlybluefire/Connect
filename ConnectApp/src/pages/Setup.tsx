@@ -9,6 +9,7 @@ import {
   IonContent,
   IonFooter,
   IonHeader,
+  IonIcon,
   IonItem,
   IonList,
   IonPage,
@@ -16,6 +17,7 @@ import {
   useIonRouter,
 } from "@ionic/react";
 import { updateProfile, User } from "firebase/auth";
+import { logOutOutline } from "ionicons/icons";
 import { useRef } from "react";
 import { PagesProps } from "../models/PagesProps";
 import { FirebaseService } from "../services/FirebaseService";
@@ -84,7 +86,7 @@ const Setup: React.FC<PagesProps> = ({ setLoading, setError }) => {
             </IonCardTitle>
             <IonCardSubtitle>
               <IonButton fill="clear" color="danger" routerLink="/logout">
-                Ausloggen
+                <IonIcon slot="icon-only" icon={logOutOutline}></IonIcon>
               </IonButton>
             </IonCardSubtitle>
           </IonCardHeader>

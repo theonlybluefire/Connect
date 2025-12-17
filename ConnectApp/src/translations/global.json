@@ -1,0 +1,81 @@
+{
+  "en": {
+    "app": {
+      "errorHeader": "Error",
+      "errorSubHeader": "An error occurred",
+      "ok": "OK"
+    },
+    "button": {
+      "logout": "Logout",
+      "finish": "Finish",
+      "login": "Login",
+      "confirm": "Confirm"
+    },
+    "label": {
+      "email": "E‑Mail",
+      "password": "Password",
+      "name": "Name",
+      "profileImageAlt": "Profile image",
+      "today": "Today",
+      "region": "Region",
+      "date": "Date"
+    },
+    "placeholders": {
+      "email": "you@example.com",
+      "search": "Search events..."
+    },
+    "event": {
+      "from": "From",
+      "to": "To",
+      "atTime": "at",
+      "time": "o'clock",
+      "categories": "Categories",
+      "save": "Save"
+    },
+    "setup": {
+      "title": "Setup"
+    },
+    "messages": {
+      "loginError": "Error while loggin in"
+    }
+  },
+  "de": {
+    "app": {
+      "errorHeader": "Fehler",
+      "errorSubHeader": "Ein Fehler ist aufgetreten",
+      "ok": "OK"
+    },
+    "button": {
+      "logout": "Abmelden",
+      "finish": "Fertig",
+      "login": "Anmelden",
+      "confirm": "Bestätigen"
+    },
+    "label": {
+      "email": "E‑Mail",
+      "password": "Passwort",
+      "name": "Name",
+      "profileImageAlt": "Profilbild",
+      "today": "Heute",
+      "date": "Datatum"
+    },
+    "placeholders": {
+      "email": "du@beispiel.de",
+      "search": "Suchen ..."
+    },
+    "event": {
+      "from": "Von",
+      "to": "Bis",
+      "atTime": "um",
+      "time": "Uhr",
+      "categories": "Kategorien",
+      "save": "Speichern"
+    },
+    "setup": {
+      "title": "Einrichtung"
+    },
+    "messages": {
+      "loginError": "Fehler beim Anmelden"
+    }
+  }
+}
