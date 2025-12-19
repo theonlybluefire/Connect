@@ -3,7 +3,8 @@ import { EventData } from "../models/EventData";
 import { RegionData } from "../models/RegionData";
 import { FirestoreService, UserService } from "../services/FirebaseServices";
 export const getEventData = async (): Promise<EventData[]> => {
-  const bookmarkedIds: string[] = await UserService.getUserData("bookmarked");
+  const bookmarkedIds: string[] =
+    (await UserService.getUserData("bookmarked")) || [];
 
   const data = await FirestoreService.getFirestoreCollection<EventData>(
     COLLECTIONS.EVENTS,
