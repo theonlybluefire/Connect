@@ -16,6 +16,9 @@ describe("Events", () => {
       fromTime: "18:00",
       toTime: "20:00",
       categories: ["Music", "OpenAir"],
+      documentId: "",
+      bookmarked: false,
+      setBookmarked: (_b: boolean) => {},
     },
     {
       name: "Book Flea Market",
@@ -26,6 +29,9 @@ describe("Events", () => {
       fromDay: new Date(2025, 0, 5),
       toDay: new Date(2025, 0, 6),
       categories: ["Market", "Books"],
+      documentId: "",
+      bookmarked: false,
+      setBookmarked: (_b: boolean) => {},
     },
   ];
 

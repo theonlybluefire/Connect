@@ -20,7 +20,7 @@ import { updateProfile, User } from "firebase/auth";
 import { logOutOutline } from "ionicons/icons";
 import { useRef } from "react";
 import { PagesProps } from "../models/PagesProps";
-import { FirebaseService } from "../services/FirebaseService";
+import { FirebaseService } from "../services/FirebaseServices";
 
 const Setup: React.FC<PagesProps> = ({ setLoading, setError }) => {
   const router = useIonRouter();

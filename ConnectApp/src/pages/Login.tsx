@@ -11,7 +11,7 @@ import {
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { PagesProps } from "../models/PagesProps";
-import { UserService } from "../services/FirebaseService";
+import { UserService } from "../services/FirebaseServices";
 import "./Login.css";
 
 const Login: React.FC<PagesProps> = ({ setError }) => {

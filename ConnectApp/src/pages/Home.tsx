@@ -26,14 +26,14 @@ import {
   IonToolbar,
   useIonRouter,
 } from "@ionic/react";
-import { filter } from "ionicons/icons";
+import { bookmark, filter } from "ionicons/icons";
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import Events from "../components/Events/Events";
 import { getCategoryNames, getEventData } from "../logic/FirestoreLogic";
 import { EventData } from "../models/EventData";
 import { PagesProps } from "../models/PagesProps";
-import { FirebaseService } from "../services/FirebaseService";
+import { FirebaseService } from "../services/FirebaseServices";
 import "./Home.css";
 
 const Home: React.FC<PagesProps> = ({ setLoading, setError }) => {
@@ -206,6 +206,11 @@ const Home: React.FC<PagesProps> = ({ setLoading, setError }) => {
             <IonButton id="open-filter-modal">
               <IonIcon icon={filter} slot="icon-only"></IonIcon>
               {isFilterSet && <IonBadge color="danger">1</IonBadge>}
+            </IonButton>
+          </IonCol>
+          <IonCol size="auto">
+            <IonButton routerLink="/bookmarked" routerDirection="forward">
+              <IonIcon slot="icon-only" icon={bookmark}></IonIcon>
             </IonButton>
           </IonCol>
         </IonRow>

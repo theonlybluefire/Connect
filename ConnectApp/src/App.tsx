@@ -42,10 +42,11 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import "./App.css";
 import { LoginState } from "./enums";
+import Bookmarked from "./pages/Bookmarked";
 import Login from "./pages/Login";
 import Logout from "./pages/Logout";
 import Setup from "./pages/Setup";
-import { UserService } from "./services/FirebaseService";
+import { UserService } from "./services/FirebaseServices";
 import "./theme/variables.css";
 
 setupIonicReact();
@@ -112,6 +113,11 @@ const App: React.FC = () => {
           </Route>
           <Route exact path="/setup">
             <Setup setError={setError} setLoading={setLoadingState} />
+          </Route>
+          <Route exact path="/bookmarked">
+            {loginState === LoginState.LOGGED_IN && (
+              <Bookmarked setError={setError} setLoading={setLoadingState} />
+            )}
           </Route>
         </IonRouterOutlet>
       </IonReactRouter>

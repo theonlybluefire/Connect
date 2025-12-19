@@ -1,6 +1,14 @@
 import { FirebaseApp, initializeApp } from "firebase/app";
 import { Auth, getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import { Database, getDatabase, onValue, ref } from "firebase/database";
+import {
+  Database,
+  get,
+  getDatabase,
+  onValue,
+  ref,
+  remove,
+  set,
+} from "firebase/database";
 import {
   collection,
   doc,
@@ -50,6 +58,46 @@ export class UserService {
     });
   }
 
+  public static async getUserData(dataPointName: string): Promise<any> {
+    const dbRef = ref(
+      FirebaseService.Instance.realtimeDb,
+      "users/" +
+        FirebaseService.Instance.auth.currentUser?.uid +
+        "/" +
+        dataPointName
+    );
+
+    const snapshot = await get(dbRef);
+
+    if (snapshot.exists()) {
+      return snapshot.val();
+    } else {
+      console.warn("UseService: Snapshot was not found");
+      return;
+    }
+  }
+
+  public static pushUserData(dataPointName: string, data: any) {
+    const dbRef = ref(
+      FirebaseService.Instance.realtimeDb,
+      "users/" + FirebaseService.Instance.auth.currentUser?.uid
+    );
+
+    set(dbRef, { [dataPointName]: data });
+  }
+
+  public static removeUserData(dataPointName: string) {
+    const dbRef = ref(
+      FirebaseService.Instance.realtimeDb,
+      "users/" +
+        FirebaseService.Instance.auth.currentUser?.uid +
+        "/" +
+        dataPointName
+    );
+
+    remove(dbRef);
+  }
+
   public static subscribeToLoginState(onStateChange: (user: any) => void) {
     FirebaseService.Instance.auth.onAuthStateChanged((user) => {
       console.debug("UserService: Auth state changed. New user: ", user);
@@ -72,6 +120,17 @@ export class FirestoreService {
     );
 
     return result;
+  }
+
+  public static async getFirestoreDocuments(
+    collectionName: string,
+    documentIds: string[]
+  ): Promise<DocumentSnapshot<DocumentData, DocumentData>[]> {
+    return await Promise.all(
+      documentIds.map((id) =>
+        getDoc(doc(FirebaseService.Instance.firestore, collectionName, id))
+      )
+    );
   }
 
   public static async getFirestoreCollection<T>(

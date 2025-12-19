@@ -1,9 +1,11 @@
 import { COLLECTIONS } from "../constants";
 import { EventData } from "../models/EventData";
 import { RegionData } from "../models/RegionData";
-import { FirestoreService } from "../services/FirebaseService";
+import { FirestoreService, UserService } from "../services/FirebaseServices";
 export const getEventData = async (): Promise<EventData[]> => {
-  return await FirestoreService.getFirestoreCollection<EventData>(
+  const bookmarkedIds: string[] = await UserService.getUserData("bookmarked");
+
+  const data = await FirestoreService.getFirestoreCollection<EventData>(
     COLLECTIONS.EVENTS,
     (querySnapshot) => {
       let events: EventData[] = [];
@@ -16,14 +18,20 @@ export const getEventData = async (): Promise<EventData[]> => {
             data.region,
             data.added,
             data.timeText,
+            doc.id,
             data.fromDay ? new Date(data.fromDay) : undefined,
             data.toDay ? new Date(data.toDay) : undefined
           )
         );
+        if (bookmarkedIds.includes(doc.id)) events.at(-1)?.setBookmarked(true);
       });
+
+      console.log(events);
       return events;
     }
   );
+
+  return data;
 };
 
 export const getRegionData = async (): Promise<RegionData[]> => {
@@ -60,4 +68,45 @@ export const getCategoryNames = async (): Promise<string[]> => {
       return Array.from(categoriesSet);
     }
   );
+};
+
+export const bookmarkEvent = async (eventId: string): Promise<void> => {
+  let bookmarkedEvents: Set<String> = new Set(
+    (await UserService.getUserData("bookmarked")) || []
+  );
+
+  bookmarkedEvents.add(eventId);
+
+  UserService.pushUserData("bookmarked", Array.from(bookmarkedEvents));
+};
+
+export const loadBookmarkedEvents = async (): Promise<EventData[]> => {
+  const bookmarkedEvents: string[] = await UserService.getUserData(
+    "bookmarked"
+  );
+  const eventData = await FirestoreService.getFirestoreDocuments(
+    COLLECTIONS.EVENTS,
+    bookmarkedEvents
+  );
+
+  let events: EventData[] = [];
+
+  eventData.forEach((doc) => {
+    const data = doc.data();
+    if (!data) return;
+    events.push(
+      new EventData(
+        data.name,
+        data.description,
+        data.region,
+        data.added,
+        data.timeText,
+        doc.id,
+        data.fromDay ? new Date(data.fromDay) : undefined,
+        data.toDay ? new Date(data.toDay) : undefined
+      )
+    );
+  });
+
+  return events;
 };

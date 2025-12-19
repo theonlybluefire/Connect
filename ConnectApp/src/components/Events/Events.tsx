@@ -1,4 +1,5 @@
 import {
+  IonButton,
   IonCard,
   IonCardContent,
   IonCardHeader,
@@ -9,8 +10,9 @@ import {
   IonLabel,
 } from "@ionic/react";
 
-import { map } from "ionicons/icons";
+import { bookmark, bookmarkOutline, map } from "ionicons/icons";
 import { useTranslation } from "react-i18next";
+import { bookmarkEvent } from "../../logic/FirestoreLogic";
 import { EventData } from "../../models/EventData";
 
 type EventsProps = {
@@ -19,7 +21,6 @@ type EventsProps = {
 
 const Events: React.FC<EventsProps> = ({ events }) => {
   const { t } = useTranslation();
-
   return (
     <>
       {events.map((event, idx) => (
@@ -27,6 +28,17 @@ const Events: React.FC<EventsProps> = ({ events }) => {
           <IonCardHeader>
             <IonCardTitle>{event.name}</IonCardTitle>
             <IonCardSubtitle>
+              <IonButton
+                onClick={() => {
+                  event.setBookmarked(true);
+                  bookmarkEvent(event.documentId);
+                }}
+              >
+                <IonIcon
+                  slot="icon-only"
+                  icon={event.bookmarked ? bookmark : bookmarkOutline}
+                />
+              </IonButton>
               <IonChip>
                 <IonIcon icon={map} color="primary"></IonIcon>
                 <IonLabel>{event.region}</IonLabel>

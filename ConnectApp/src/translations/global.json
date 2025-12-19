@@ -9,7 +9,8 @@
       "logout": "Logout",
       "finish": "Finish",
       "login": "Login",
-      "confirm": "Confirm"
+      "confirm": "Confirm",
+      "bookmark": "bookmark"
     },
     "label": {
       "email": "E‑Mail",
@@ -49,7 +50,8 @@
       "logout": "Abmelden",
       "finish": "Fertig",
       "login": "Anmelden",
-      "confirm": "Bestätigen"
+      "confirm": "Bestätigen",
+      "bookmark": "Merken"
     },
     "label": {
       "email": "E‑Mail",
