@@ -37,7 +37,9 @@
       "title": "Setup"
     },
     "messages": {
-      "loginError": "Error while loggin in"
+      "loginError": "Error while loggin in",
+      "generalError": "A general error occurred",
+      "nothingToShow": "Nothing to show here yet."
     }
   },
   "de": {
@@ -77,7 +79,9 @@
       "title": "Einrichtung"
     },
     "messages": {
-      "loginError": "Fehler beim Anmelden"
+      "loginError": "Fehler beim Anmelden",
+      "generalError": "Ein FehlloadBookmarkedErrorer ist aufgetreten",
+      "nothingToShow": "Hier gibt es gerade nichts zu sehen."
     }
   }
 }

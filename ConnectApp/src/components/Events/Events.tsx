@@ -30,8 +30,13 @@ const Events: React.FC<EventsProps> = ({ events }) => {
             <IonCardSubtitle>
               <IonButton
                 onClick={() => {
-                  event.setBookmarked(true);
-                  bookmarkEvent(event.documentId);
+                  if (!event.bookmarked) {
+                    event.setBookmarked(true);
+                    bookmarkEvent(event.documentId);
+                  } else {
+                    event.setBookmarked(false);
+                    bookmarkEvent(event.documentId);
+                  }
                 }}
               >
                 <IonIcon

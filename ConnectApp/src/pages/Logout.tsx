@@ -2,7 +2,6 @@ import { IonButton, IonContent, IonHeader, IonPage } from "@ionic/react";
 import { useTranslation } from "react-i18next";
 import { PagesProps } from "../models/PagesProps";
 import { UserService } from "../services/FirebaseServices";
-import "./Login.css";
 
 const Logout: React.FC<PagesProps> = () => {
   const { t } = useTranslation();

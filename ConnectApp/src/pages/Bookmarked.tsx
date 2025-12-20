@@ -1,5 +1,7 @@
 import {
   IonButton,
+  IonCard,
+  IonCardHeader,
   IonContent,
   IonFooter,
   IonIcon,
@@ -14,8 +16,6 @@ import Events from "../components/Events/Events";
 import { loadBookmarkedEvents } from "../logic/FirestoreLogic";
 import { EventData } from "../models/EventData";
 import { PagesProps } from "../models/PagesProps";
-import { UserService } from "../services/FirebaseServices";
-import "./Home.css";
 
 const Bookmarked: React.FC<PagesProps> = ({ setLoading, setError }) => {
   const router = useIonRouter();
@@ -24,14 +24,17 @@ const Bookmarked: React.FC<PagesProps> = ({ setLoading, setError }) => {
   const [bookmarkedEvents, setBookmarkedEvents] = useState<EventData[]>([]);
 
   useIonViewWillEnter(() => {
-    UserService.subscribeToUserData(() => {});
     loadData();
   });
 
   const loadData = async () => {
     setLoading(true);
 
-    setBookmarkedEvents(await loadBookmarkedEvents());
+    try {
+      setBookmarkedEvents(await loadBookmarkedEvents());
+    } catch (error: unknown) {
+      setError(t("messages.generalError") + ": " + (error as Error).message);
+    }
 
     setLoading(false);
   };
@@ -40,6 +43,11 @@ const Bookmarked: React.FC<PagesProps> = ({ setLoading, setError }) => {
     <IonPage>
       <IonContent fullscreen>
         <Events events={bookmarkedEvents} />
+        {bookmarkedEvents.length === 0 && (
+          <IonCard mode="ios">
+            <IonCardHeader>{t("messages.nothingToShow")}</IonCardHeader>
+          </IonCard>
+        )}
       </IonContent>
       <IonFooter>
         {router.canGoBack() && (

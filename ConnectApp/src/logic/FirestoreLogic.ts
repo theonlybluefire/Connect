@@ -76,7 +76,11 @@ export const bookmarkEvent = async (eventId: string): Promise<void> => {
     (await UserService.getUserData("bookmarked")) || []
   );
 
-  bookmarkedEvents.add(eventId);
+  if (bookmarkedEvents.has(eventId)) {
+    bookmarkedEvents.delete(eventId);
+  } else {
+    bookmarkedEvents.add(eventId);
+  }
 
   UserService.pushUserData("bookmarked", Array.from(bookmarkedEvents));
 };
@@ -85,6 +89,7 @@ export const loadBookmarkedEvents = async (): Promise<EventData[]> => {
   const bookmarkedEvents: string[] = await UserService.getUserData(
     "bookmarked"
   );
+  if (!bookmarkedEvents) return [];
   const eventData = await FirestoreService.getFirestoreDocuments(
     COLLECTIONS.EVENTS,
     bookmarkedEvents

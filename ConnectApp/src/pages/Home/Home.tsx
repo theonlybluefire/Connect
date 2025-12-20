@@ -29,11 +29,11 @@ import {
 import { bookmark, filter } from "ionicons/icons";
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import Events from "../components/Events/Events";
-import { getCategoryNames, getEventData } from "../logic/FirestoreLogic";
-import { EventData } from "../models/EventData";
-import { PagesProps } from "../models/PagesProps";
-import { FirebaseService } from "../services/FirebaseServices";
+import Events from "../../components/Events/Events";
+import { getCategoryNames, getEventData } from "../../logic/FirestoreLogic";
+import { EventData } from "../../models/EventData";
+import { PagesProps } from "../../models/PagesProps";
+import { FirebaseService } from "../../services/FirebaseServices";
 import "./Home.css";
 
 const Home: React.FC<PagesProps> = ({ setLoading, setError }) => {
@@ -55,7 +55,6 @@ const Home: React.FC<PagesProps> = ({ setLoading, setError }) => {
   const filterDateTo = useRef<HTMLIonInputElement>(null);
   const filterCategorie = useRef<HTMLIonInputElement>(null);
 
-  //temporary categories for demo purposes
   useEffect(() => {
     setLoading(true);
     getFirebaseData().then(() => setLoading(false));
@@ -174,7 +173,7 @@ const Home: React.FC<PagesProps> = ({ setLoading, setError }) => {
 
   return (
     <IonPage>
-      <IonHeader>
+      <IonHeader translucent={true} mode="ios">
         <IonRow class="ion-align-items-center">
           <IonCol size="auto">
             <IonChip
@@ -203,13 +202,13 @@ const Home: React.FC<PagesProps> = ({ setLoading, setError }) => {
             ></IonSearchbar>
           </IonCol>
           <IonCol size="auto">
-            <IonButton id="open-filter-modal">
+            <IonButton id="open-filter-modal" mode="md">
               <IonIcon icon={filter} slot="icon-only"></IonIcon>
               {isFilterSet && <IonBadge color="danger">1</IonBadge>}
             </IonButton>
           </IonCol>
           <IonCol size="auto">
-            <IonButton routerLink="/bookmarked" routerDirection="forward">
+            <IonButton routerLink="/bookmarked" mode="md">
               <IonIcon slot="icon-only" icon={bookmark}></IonIcon>
             </IonButton>
           </IonCol>
