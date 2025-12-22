@@ -146,6 +146,15 @@ const Home: React.FC<PagesProps> = ({ setLoading, setError }) => {
     setCurrentEvents(filteredEvents);
   };
 
+  const resetFilters = () => {
+    setCurrentEvents(events.current);
+    setIsFilterSet(false);
+    filterRegion.current!.value = "";
+    filterDateFrom.current!.value = "";
+    filterDateTo.current!.value = "";
+    filterCategorie.current!.value = "";
+  };
+
   const handleTodayFastFilter = () => {
     if (fastFilter == 1) {
       //reset filter
@@ -212,7 +221,20 @@ const Home: React.FC<PagesProps> = ({ setLoading, setError }) => {
           <IonCol size="auto">
             <IonButton id="open-filter-modal" mode="md">
               <IonIcon icon={filter} slot="icon-only"></IonIcon>
-              {isFilterSet && <IonBadge color="danger">1</IonBadge>}
+              {isFilterSet && (
+                <IonBadge
+                  color="danger"
+                  style={{
+                    position: "absolute",
+                    top: "-8px",
+                    right: "-1px",
+                    fontSize: "0.75em",
+                    zIndex: 999999,
+                  }}
+                >
+                  1
+                </IonBadge>
+              )}
             </IonButton>
           </IonCol>
           <IonCol size="auto">
@@ -310,6 +332,9 @@ const Home: React.FC<PagesProps> = ({ setLoading, setError }) => {
                 ></IonInput>
               </IonItem>
             </IonList>
+            <IonButton expand="block" color="danger" onClick={resetFilters}>
+              {t("button.reset")}
+            </IonButton>
           </IonContent>
         </IonModal>
       </IonContent>

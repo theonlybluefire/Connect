@@ -10,7 +10,8 @@
       "finish": "Finish",
       "login": "Login",
       "confirm": "Confirm",
-      "bookmark": "bookmark"
+      "bookmark": "Bookmark",
+      "reset": "Reset"
     },
     "label": {
       "email": "E‑Mail",
@@ -23,7 +24,7 @@
     },
     "placeholders": {
       "email": "you@example.com",
-      "search": "Search events..."
+      "search": "Search..."
     },
     "event": {
       "from": "From",
@@ -55,7 +56,8 @@
       "finish": "Fertig",
       "login": "Anmelden",
       "confirm": "Bestätigen",
-      "bookmark": "Merken"
+      "bookmark": "Merken",
+      "reset": "Zurücksetzen"
     },
     "label": {
       "email": "E‑Mail",
@@ -63,7 +65,7 @@
       "name": "Name",
       "profileImageAlt": "Profilbild",
       "today": "Heute",
-      "date": "Datatum"
+      "date": "Datum"
     },
     "placeholders": {
       "email": "du@beispiel.de",
