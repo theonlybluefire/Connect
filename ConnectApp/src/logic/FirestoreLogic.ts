@@ -3,7 +3,7 @@ import { EventData } from "../models/EventData";
 import { RegionData } from "../models/RegionData";
 import { FirestoreService, UserService } from "../services/FirebaseServices";
 export const getEventData = async (): Promise<EventData[]> => {
-  const bookmarkedIds: string[] =
+  const bookmarkedEventIds: string[] =
     (await UserService.getUserData("bookmarked")) || [];
 
   const data = await FirestoreService.getFirestoreCollection<EventData>(
@@ -24,7 +24,8 @@ export const getEventData = async (): Promise<EventData[]> => {
             data.toDay ? new Date(data.toDay) : undefined
           )
         );
-        if (bookmarkedIds.includes(doc.id)) events.at(-1)?.setBookmarked(true);
+        if (bookmarkedEventIds.includes(doc.id))
+          events.at(-1)?.setBookmarked(true);
       });
 
       console.log(events);
@@ -86,13 +87,13 @@ export const bookmarkEvent = async (eventId: string): Promise<void> => {
 };
 
 export const loadBookmarkedEvents = async (): Promise<EventData[]> => {
-  const bookmarkedEvents: string[] = await UserService.getUserData(
+  const bookmarkedEventIds: string[] = await UserService.getUserData(
     "bookmarked"
   );
-  if (!bookmarkedEvents) return [];
+  if (!bookmarkedEventIds) return [];
   const eventData = await FirestoreService.getFirestoreDocuments(
     COLLECTIONS.EVENTS,
-    bookmarkedEvents
+    bookmarkedEventIds
   );
 
   let events: EventData[] = [];
@@ -112,6 +113,8 @@ export const loadBookmarkedEvents = async (): Promise<EventData[]> => {
         data.toDay ? new Date(data.toDay) : undefined
       )
     );
+
+    if (bookmarkedEventIds.includes(doc.id)) events.at(-1)?.setBookmarked(true);
   });
 
   return events;

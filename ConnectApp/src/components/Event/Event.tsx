@@ -11,6 +11,7 @@ import {
 } from "@ionic/react";
 
 import { bookmark, bookmarkOutline, map } from "ionicons/icons";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { EventData } from "../../models/EventData";
 
@@ -25,6 +26,7 @@ const Event: React.FC<EventProps> = ({ event, index, bookmarkEvent }) => {
     VARIABLES
   */
   const { t } = useTranslation();
+  const [bookmarked, setBookmarked] = useState<boolean>(event.bookmarked);
 
   return (
     <>
@@ -36,11 +38,12 @@ const Event: React.FC<EventProps> = ({ event, index, bookmarkEvent }) => {
               data-testid="bookmark"
               onClick={() => {
                 bookmarkEvent(event);
+                setBookmarked(event.bookmarked);
               }}
             >
               <IonIcon
                 slot="icon-only"
-                icon={event.bookmarked ? bookmark : bookmarkOutline}
+                icon={bookmarked ? bookmark : bookmarkOutline}
               />
             </IonButton>
             <IonChip>
