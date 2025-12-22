@@ -4,6 +4,9 @@ import { PagesProps } from "../models/PagesProps";
 import { UserService } from "../services/FirebaseServices";
 
 const Logout: React.FC<PagesProps> = () => {
+  /*
+    VARIABLES
+  */
   const { t } = useTranslation();
 
   return (

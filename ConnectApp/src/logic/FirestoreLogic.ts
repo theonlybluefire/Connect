@@ -116,3 +116,9 @@ export const loadBookmarkedEvents = async (): Promise<EventData[]> => {
 
   return events;
 };
+
+function removeRemovableBookmarkedEvents(events: EventData[]) {
+  events.forEach((event) => {
+    event.isBookmarkRemovable() && bookmarkEvent(event.documentId);
+  });
+}

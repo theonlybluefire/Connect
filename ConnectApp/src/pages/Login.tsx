@@ -14,10 +14,16 @@ import { PagesProps } from "../models/PagesProps";
 import { UserService } from "../services/FirebaseServices";
 
 const Login: React.FC<PagesProps> = ({ setError }) => {
+  /*
+    VARIABLES
+  */
   const { t } = useTranslation();
   const email = useRef<string>("");
   const password = useRef<string>("");
 
+  /* 
+    FUNCTIONS
+  */
   const handleLogin = async (e: any): Promise<void> => {
     e.preventDefault();
     try {

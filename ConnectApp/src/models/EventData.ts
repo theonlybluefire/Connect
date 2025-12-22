@@ -43,4 +43,31 @@ export class EventData {
   public setBookmarked(isBookmarked: boolean) {
     this.bookmarked = isBookmarked;
   }
+
+  public static getRemovableBookmarkedEvents(
+    bookmarkedEvents: EventData[]
+  ): EventData[] {
+    const removable: EventData[] = [];
+
+    bookmarkedEvents.forEach((event) => {
+      if (event.isBookmarkRemovable()) {
+        removable.push(event);
+      }
+    });
+
+    return removable;
+  }
+
+  public isBookmarkRemovable() {
+    const today = new Date();
+
+    if (
+      this.fromDay &&
+      this.fromDay.getTime() < today.getTime() &&
+      this.bookmarked
+    ) {
+      return true;
+    }
+    return false;
+  }
 }

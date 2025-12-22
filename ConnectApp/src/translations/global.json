@@ -33,13 +33,15 @@
       "categories": "Categories",
       "save": "Save"
     },
-    "setup": {
-      "title": "Setup"
-    },
     "messages": {
       "loginError": "Error while loggin in",
       "generalError": "A general error occurred",
       "nothingToShow": "Nothing to show here yet."
+    },
+    "other": {
+      "Indays": "days",
+      "InMonths": "months",
+      "InYears": "years"
     }
   },
   "de": {
@@ -75,13 +77,15 @@
       "categories": "Kategorien",
       "save": "Speichern"
     },
-    "setup": {
-      "title": "Einrichtung"
-    },
     "messages": {
       "loginError": "Fehler beim Anmelden",
       "generalError": "Ein FehlloadBookmarkedErrorer ist aufgetreten",
       "nothingToShow": "Hier gibt es gerade nichts zu sehen."
+    },
+    "other": {
+      "Indays": "tagen",
+      "InMonths": "monaten",
+      "InYears": "jahren"
     }
   }
 }

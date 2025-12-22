@@ -23,6 +23,9 @@ import { PagesProps } from "../models/PagesProps";
 import { FirebaseService } from "../services/FirebaseServices";
 
 const Setup: React.FC<PagesProps> = ({ setLoading, setError }) => {
+  /*
+    VARIABLES
+  */
   const router = useIonRouter();
 
   const user: User | null = FirebaseService.Instance.auth.currentUser;
@@ -32,6 +35,9 @@ const Setup: React.FC<PagesProps> = ({ setLoading, setError }) => {
   const displayNameRef = useRef<HTMLIonTextareaElement>(null);
   const emailRef = useRef<HTMLIonTextareaElement>(null);
 
+  /* 
+    FUNCTIONS
+  */
   const finished = () => {
     if (!user) return;
 

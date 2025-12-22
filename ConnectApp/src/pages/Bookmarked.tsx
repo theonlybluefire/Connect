@@ -18,15 +18,24 @@ import { EventData } from "../models/EventData";
 import { PagesProps } from "../models/PagesProps";
 
 const Bookmarked: React.FC<PagesProps> = ({ setLoading, setError }) => {
+  /*
+    VARIABLES
+  */
   const router = useIonRouter();
   const { t } = useTranslation();
 
   const [bookmarkedEvents, setBookmarkedEvents] = useState<EventData[]>([]);
 
+  /*
+    HOOKS
+  */
   useIonViewWillEnter(() => {
     loadData();
   });
 
+  /* 
+    FUNCTIONS 
+  */
   const loadData = async () => {
     setLoading(true);
 

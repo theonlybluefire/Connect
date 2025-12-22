@@ -3,10 +3,6 @@ import {
   IonBadge,
   IonButton,
   IonButtons,
-  IonCard,
-  IonCardContent,
-  IonCardHeader,
-  IonCardSubtitle,
   IonChip,
   IonCol,
   IonContent,
@@ -30,24 +26,32 @@ import { bookmark, filter } from "ionicons/icons";
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import Events from "../../components/Events/Events";
-import { getCategoryNames, getEventData } from "../../logic/FirestoreLogic";
+import {
+  getCategoryNames,
+  getEventData,
+  getRegionData,
+} from "../../logic/FirestoreLogic";
 import { EventData } from "../../models/EventData";
 import { PagesProps } from "../../models/PagesProps";
+import { RegionData } from "../../models/RegionData";
 import { FirebaseService } from "../../services/FirebaseServices";
 import "./Home.css";
 
 const Home: React.FC<PagesProps> = ({ setLoading, setError }) => {
+  /*
+    VARIABLES
+  */
   const router = useIonRouter();
   const { t } = useTranslation();
 
   const [currentEvents, setCurrentEvents] = useState<EventData[]>([]);
   const [categories, setCategories] = useState<string[]>([]);
-  const [regions, setRegions] = useState<string[]>([]);
+  const [regions, setRegions] = useState<RegionData[]>([]);
+
   const events = useRef<EventData[]>([]);
   const searchbar = useRef<HTMLIonSearchbarElement>(null);
   const filterModal = useRef<HTMLIonModalElement>(null);
 
-  //filter
   const [isFilterSet, setIsFilterSet] = useState<boolean>(false);
   const [fastFilter, setFastFilter] = useState<number>(0); //0 = no filter, 1 = todays fast filter, above = category filter in order
   const filterRegion = useRef<HTMLIonInputElement>(null);
@@ -55,25 +59,29 @@ const Home: React.FC<PagesProps> = ({ setLoading, setError }) => {
   const filterDateTo = useRef<HTMLIonInputElement>(null);
   const filterCategorie = useRef<HTMLIonInputElement>(null);
 
+  /*
+    HOOKS
+  */
   useEffect(() => {
     setLoading(true);
     getFirebaseData().then(() => setLoading(false));
   }, []);
 
-  //get data
+  /*
+    FUNCTIONS
+  */
   const getFirebaseData = async () => {
     try {
-      //get events
       events.current = await getEventData();
-      setCategories(await getCategoryNames());
-    } catch (e) {
-      setError("Error while loading events: " + e);
-    }
 
-    setCurrentEvents(events.current);
+      setCategories(await getCategoryNames());
+      setRegions(await getRegionData());
+      setCurrentEvents(events.current);
+    } catch (e) {
+      setError(t("messages.generalError") + e);
+    }
   };
 
-  //refresh handler
   const handleRefresh = (event: CustomEvent) => {
     getFirebaseData().then(() => event.detail.complete());
   };
@@ -242,14 +250,6 @@ const Home: React.FC<PagesProps> = ({ setLoading, setError }) => {
         <IonRefresher slot="fixed" onIonRefresh={handleRefresh}>
           <IonRefresherContent></IonRefresherContent>
         </IonRefresher>
-        <IonCard mode="ios" color="primary">
-          <IonCardHeader>
-            <IonCardSubtitle>Aktivität von Freunden </IonCardSubtitle>
-          </IonCardHeader>
-          <IonCardContent>
-            <p>Cooming soon</p>
-          </IonCardContent>
-        </IonCard>
         <Events events={currentEvents} />
         <IonModal mode="ios" ref={filterModal} trigger="open-filter-modal">
           <IonHeader>
