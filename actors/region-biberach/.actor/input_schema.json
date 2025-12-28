@@ -1,0 +1,22 @@
+{
+  "title": "Apify Connect scraper configuration",
+  "type": "object",
+  "schemaVersion": 1,
+  "properties": {
+    "url": {
+      "title": "URL of the page",
+      "type": "string",
+      "description": "URL of the target website",
+      "editor": "textfield",
+      "prefill": ""
+    },
+    "datasetName": {
+      "title": "Dataset Name",
+      "type": "string",
+      "description": "Name of the dataset to store the results in",
+      "editor": "textfield",
+      "prefill": "com.connect.data.events"
+    }
+  },
+  "required": ["url", "datasetName"]
+}

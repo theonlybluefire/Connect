@@ -16,3 +16,6 @@ storage/key_value_stores/default/*
 # Added by Apify CLI
 storage
 .venv
+
+# Local input file for testing
+input.json

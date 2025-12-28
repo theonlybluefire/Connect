@@ -1,0 +1,12 @@
+{
+  "actorSpecification": 1,
+  "name": "connect-region-[region]",
+  "title": "Connect Region [region]",
+  "description": "Apify Actor used to scrape data for the Connect App",
+  "version": "1.0",
+  "meta": {
+    "templateId": "js-start"
+  },
+  "input": "./input_schema.json",
+  "dockerfile": "../Dockerfile"
+}
