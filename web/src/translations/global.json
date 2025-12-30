@@ -5,6 +5,9 @@
       "errorSubHeader": "An error occurred",
       "ok": "OK"
     },
+    "headers": {
+      "filterEvents": "Filter events"
+    },
     "button": {
       "logout": "Logout",
       "finish": "Finish",
@@ -50,6 +53,9 @@
       "errorHeader": "Fehler",
       "errorSubHeader": "Ein Fehler ist aufgetreten",
       "ok": "OK"
+    },
+    "headers": {
+      "filterEvents": "Events filtern"
     },
     "button": {
       "logout": "Abmelden",

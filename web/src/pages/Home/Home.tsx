@@ -277,7 +277,7 @@ const Home: React.FC<PagesProps> = ({ setLoading, setError }) => {
           <IonHeader>
             <IonToolbar>
               <IonButtons slot="start"></IonButtons>
-              <IonTitle>Events filtern</IonTitle>
+              <IonTitle>{t("headers.filterEvents")}</IonTitle>
               <IonButtons slot="end">
                 <IonButton
                   strong={true}
@@ -298,7 +298,7 @@ const Home: React.FC<PagesProps> = ({ setLoading, setError }) => {
                 <IonInput
                   ref={filterRegion}
                   value={filterRegion.current?.value}
-                  placeholder="nach Region suchen"
+                  placeholder={t("placeholders.search")}
                 ></IonInput>
               </IonItem>
               <IonItem>

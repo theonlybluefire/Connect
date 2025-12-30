@@ -19,6 +19,7 @@ import {
 import { updateProfile, User } from "firebase/auth";
 import { logOutOutline } from "ionicons/icons";
 import { useRef } from "react";
+import { useTranslation } from "react-i18next";
 import { PagesProps } from "../models/PagesProps";
 import { FirebaseService } from "../services/FirebaseServices";
 
@@ -27,6 +28,7 @@ const Setup: React.FC<PagesProps> = ({ setLoading, setError }) => {
     VARIABLES
   */
   const router = useIonRouter();
+  const { t } = useTranslation();
 
   const user: User | null = FirebaseService.Instance.auth.currentUser;
 
@@ -119,7 +121,7 @@ const Setup: React.FC<PagesProps> = ({ setLoading, setError }) => {
       </IonContent>
       <IonFooter>
         <IonButton expand="block" onClick={finished}>
-          Fertig
+          {t("button.finish")}
         </IonButton>
       </IonFooter>
     </IonPage>
