@@ -58,7 +58,7 @@ const Event: React.FC<EventProps> = ({ event, index, bookmarkEvent }) => {
           )}
           {event.fromDay && (
             <>
-              <strong>{t("events.from")}: </strong>
+              <strong>{t("event.from")}: </strong>
               {event.fromDay.toLocaleDateString()}
             </>
           )}
@@ -71,7 +71,7 @@ const Event: React.FC<EventProps> = ({ event, index, bookmarkEvent }) => {
 
           {event.toDay && (
             <>
-              <strong>{t("events.to")}: </strong>
+              <strong>{t("event.to")}: </strong>
               {event.toDay.toLocaleDateString()}
             </>
           )}
