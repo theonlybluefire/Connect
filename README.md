@@ -4,7 +4,7 @@
 </div>
 
 [![Frontend Netlify Status](https://api.netlify.com/api/v1/badges/01d0c7d0-fec9-40d3-a00b-39c5e4b18e5f/deploy-status)](https://app.netlify.com/projects/connect-webapp/deploys)
-
+[![Run Tests](https://github.com/theonlybluefire/Connect/actions/workflows/node.js.yml/badge.svg)](https://github.com/theonlybluefire/Connect/actions/workflows/node.js.yml)
 # ✨ Introduction
 
 Connect is an App aimed to provide a central place for events in your area. The information about events and activities hosted by your city or county is often scattered across their multiple websites and manually locking each one up looking for something interesting is time consuming and tidious.
