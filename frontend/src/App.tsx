@@ -72,9 +72,11 @@ const App: React.FC = () => {
   });
 
   return (
-    <IonApp>
+    <IonApp className="safe-area-margin-top">
       {loginState === LoginState.LOADING ||
-        (loading && <IonLoading mode="ios" isOpen={true} />)}
+        (loading && (
+          <IonLoading mode="ios" spinner={"circular"} isOpen={true} />
+        ))}
 
       {error !== "" && (
         <IonAlert

@@ -13,7 +13,7 @@ import { useTranslation } from "react-i18next";
 import { PagesProps } from "../models/PagesProps";
 import { UserService } from "../services/FirebaseServices";
 
-const Login: React.FC<PagesProps> = ({ setError }) => {
+const Login: React.FC<PagesProps> = ({ setError, setLoading }) => {
   /*
     VARIABLES
   */
@@ -26,10 +26,14 @@ const Login: React.FC<PagesProps> = ({ setError }) => {
   */
   const handleLogin = async (e: any): Promise<void> => {
     e.preventDefault();
+
+    setLoading(true);
     try {
       await UserService.login(email.current, password.current);
     } catch (error: unknown) {
       setError(t("messages.loginError") + ": " + (error as Error).message);
+    } finally {
+      setLoading(false);
     }
   };
 
