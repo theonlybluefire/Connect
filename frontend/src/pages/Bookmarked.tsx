@@ -58,10 +58,11 @@ const Bookmarked: React.FC<PagesProps> = ({ setLoading, setError }) => {
           </IonCard>
         )}
       </IonContent>
-      <IonFooter>
+      <IonFooter className="safe-area-margin-bottom">
         {router.canGoBack() && (
-          <IonButton expand="full" onClick={() => router.goBack()}>
-            <IonIcon slot="icon-only" icon={arrowBack}></IonIcon>
+          <IonButton mode="ios" expand="block" onClick={() => router.goBack()}>
+            {t("button.back")}
+            <IonIcon slot="start" icon={arrowBack}></IonIcon>
           </IonButton>
         )}
       </IonFooter>

@@ -14,7 +14,8 @@
       "login": "Login",
       "confirm": "Confirm",
       "bookmark": "Bookmark",
-      "reset": "Reset"
+      "reset": "Reset",
+      "back": "Back"
     },
     "label": {
       "email": "E‑Mail",
@@ -63,7 +64,8 @@
       "login": "Anmelden",
       "confirm": "Bestätigen",
       "bookmark": "Merken",
-      "reset": "Zurücksetzen"
+      "reset": "Zurücksetzen",
+      "back": "Zurück"
     },
     "label": {
       "email": "E‑Mail",

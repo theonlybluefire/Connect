@@ -119,8 +119,8 @@ const Setup: React.FC<PagesProps> = ({ setLoading, setError }) => {
           </IonCardContent>
         </IonCard>
       </IonContent>
-      <IonFooter>
-        <IonButton expand="block" onClick={finished}>
+      <IonFooter className="safe-area-margin-bottom">
+        <IonButton mode="ios" expand="block" onClick={finished}>
           {t("button.finish")}
         </IonButton>
       </IonFooter>

@@ -1,3 +1,6 @@
 .safe-area-margin-top {
   margin-top: var(--ion-safe-area-top);
 }
+.safe-area-margin-bottom {
+  margin-bottom: var(--ion-safe-area-bottom);
+}

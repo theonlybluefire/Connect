@@ -190,10 +190,11 @@ const Home: React.FC<PagesProps> = ({ setLoading, setError }) => {
 
   return (
     <IonPage>
-      <IonHeader translucent={true} mode="ios">
+      <IonHeader translucent={true} mode="ios" className="safe-area-margin-top">
         <IonRow class="ion-align-items-center">
           <IonCol size="auto">
             <IonChip
+              mode="ios"
               onClick={() => router.push("/setup", "forward", "replace")}
               style={{ cursor: "pointer" }}
             >
