@@ -18,6 +18,8 @@ import {
   IonRefresherContent,
   IonRow,
   IonSearchbar,
+  IonSelect,
+  IonSelectOption,
   IonTitle,
   IonToolbar,
   useIonRouter,
@@ -54,10 +56,10 @@ const Home: React.FC<PagesProps> = ({ setLoading, setError }) => {
 
   const [isFilterSet, setIsFilterSet] = useState<boolean>(false);
   const [fastFilter, setFastFilter] = useState<number>(0); //0 = no filter, 1 = todays fast filter, above = category filter in order
-  const filterRegion = useRef<HTMLIonInputElement>(null);
+  const filterRegion = useRef<string[]>([]);
   const filterDateFrom = useRef<HTMLIonInputElement>(null);
   const filterDateTo = useRef<HTMLIonInputElement>(null);
-  const filterCategorie = useRef<HTMLIonInputElement>(null);
+  const filterCategories = useRef<string[]>([]);
 
   /*
     HOOKS
@@ -106,36 +108,32 @@ const Home: React.FC<PagesProps> = ({ setLoading, setError }) => {
   };
 
   const filterEventList = () => {
-    let region: string =
-      filterRegion.current?.value?.toString().toLowerCase() || "";
+    let regions: string[] = filterRegion.current || [];
     let dateFrom: Date | null = filterDateFrom.current?.value
       ? new Date(String(filterDateFrom.current?.value || ""))
       : null;
     let dateTo: Date | null = filterDateTo.current?.value
       ? new Date(String(filterDateTo.current?.value))
       : null;
-    let category: string =
-      filterCategorie.current?.value?.toString().toLocaleLowerCase() || "";
+    let categories: string[] = filterCategories.current || [];
 
-    let categories: String[] = category.split(",");
-
-    region || category || dateTo || dateFrom
+    regions.length != 0 || categories.length != 0 || dateTo || dateFrom
       ? setIsFilterSet(true)
       : setIsFilterSet(false);
 
     const filteredEvents = events.current.filter((event) => {
       let matches = true;
-      if (region) {
-        matches = matches && event.region?.toLowerCase().includes(region);
+      if (regions.length != 0) {
+        //TODO: use region id instead of region description
+        matches = matches && regions.includes(event.region.toLowerCase());
       }
       if (dateFrom && event.fromDay) {
-        console.log(dateFrom);
         matches = matches && event.fromDay >= dateFrom;
       }
       if (dateTo && event.toDay) {
         matches = matches && event.toDay <= dateTo;
       }
-      if (category) {
+      if (categories.length != 0) {
         matches =
           matches &&
           event.categories?.filter((item) => categories.includes(item))
@@ -149,10 +147,10 @@ const Home: React.FC<PagesProps> = ({ setLoading, setError }) => {
   const resetFilters = () => {
     setCurrentEvents(events.current);
     setIsFilterSet(false);
-    filterRegion.current!.value = "";
+    filterRegion.current = [];
     filterDateFrom.current!.value = "";
     filterDateTo.current!.value = "";
-    filterCategorie.current!.value = "";
+    filterCategories.current = [];
   };
 
   const handleTodayFastFilter = () => {
@@ -296,11 +294,20 @@ const Home: React.FC<PagesProps> = ({ setLoading, setError }) => {
             <IonList mode="ios">
               <IonItem>
                 <IonLabel position="stacked">{t("label.region")}</IonLabel>
-                <IonInput
-                  ref={filterRegion}
-                  value={filterRegion.current?.value}
-                  placeholder={t("placeholders.search")}
-                ></IonInput>
+                <IonSelect
+                  value={filterRegion.current}
+                  onIonChange={(e) => (filterRegion.current = e.detail.value)}
+                  multiple
+                >
+                  {regions.map((item) => (
+                    <IonSelectOption
+                      disabled={item.regionStatus == 0}
+                      value={item.regionId}
+                    >
+                      {item.regionDescription}
+                    </IonSelectOption>
+                  ))}
+                </IonSelect>
               </IonItem>
               <IonItem>
                 <IonLabel position="stacked">
@@ -326,11 +333,17 @@ const Home: React.FC<PagesProps> = ({ setLoading, setError }) => {
               </IonItem>
               <IonItem>
                 <IonLabel position="stacked">{t("event.categories")}</IonLabel>
-                <IonInput
-                  ref={filterCategorie}
-                  value={filterCategorie.current?.value}
-                  placeholder={t("placeholders.search")}
-                ></IonInput>
+                <IonSelect
+                  value={filterCategories.current}
+                  onIonChange={(e) =>
+                    (filterCategories.current = e.detail.value)
+                  }
+                  multiple
+                >
+                  {categories.map((item) => (
+                    <IonSelectOption value={item}>{item}</IonSelectOption>
+                  ))}
+                </IonSelect>
               </IonItem>
             </IonList>
             <IonButton expand="block" color="danger" onClick={resetFilters}>

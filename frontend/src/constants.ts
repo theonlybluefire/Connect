@@ -1,4 +1,4 @@
 export const COLLECTIONS = {
   EVENTS: "com.data.events",
-  REGIONS: "com.configs.availableRegions",
+  REGIONS: "com.configs.available-regions",
 };
