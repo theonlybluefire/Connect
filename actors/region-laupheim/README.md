@@ -13,7 +13,7 @@ _This Quick Start Guide explains how to setup an Apify Actor thats scrapes event
 - [x] Create a `input.json` file containing the actors configuration as a json object (see `input_schema.json`)
 - [x] Install a dependencies using `npm install`
 - [x] Set the `REGION` constant to the region of the actor
-- [ ] Implement the actors scraping logic inside the declared positions (Events need to follow a specific format specified below)
+- [x] Implement the actors scraping logic inside the declared positions (Events need to follow a specific format specified below)
 
 ## Important notes
 
