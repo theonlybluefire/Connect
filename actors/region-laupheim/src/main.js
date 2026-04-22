@@ -47,21 +47,36 @@ $(
     .text()
     .trim();
 
-  //TODO: possibly use later
-  const detailLink = $(el).find(".hw_record__more__show").attr("href");
-  const mapsLink = $(el).find(".hw_record__map_link--desktop").attr("href");
+  //INFO: Could be useful for fure improvements
+  //const detailLink = $(el).find(".hw_record__more__show").attr("href");
+  //const mapsLink = $(el).find(".hw_record__map_link--desktop").attr("href");
 
   events.push({
     name: name,
     description: organizer + " " + location,
     added: new Date().toISOString(),
     timeText: time,
-    fromDay: (([d, m, y]) => new Date(y, m - 1, d).toISOString())(
-      date.split("."),
-    ),
-    toDay: (([d, m, y]) => new Date(y, m - 1, d).toISOString())(
-      date.split("."),
-    ),
+    fromDay: (() => {
+      const dateRange = date.split(" bis ");
+      const parts = dateRange[0].trim().split(".");
+
+      if (parts.length === 3) {
+        const [d, m, y] = parts;
+        const parsedDate = new Date(y, m - 1, d);
+        return isNaN(parsedDate) ? null : parsedDate.toISOString();
+      }
+      return null;
+    })(),
+    toDay: (() => {
+      const dateRange = date.split(" bis ");
+      const parts = dateRange[dateRange.length - 1].trim().split(".");
+      if (parts.length === 3) {
+        const [d, m, y] = parts;
+        const parsedDate = new Date(y, m - 1, d);
+        return isNaN(parsedDate) ? null : parsedDate.toISOString();
+      }
+      return null;
+    })(),
     region: REGION,
   });
 });
