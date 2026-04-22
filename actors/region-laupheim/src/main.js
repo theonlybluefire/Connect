@@ -47,9 +47,9 @@ $(
     .text()
     .trim();
 
-  //TODO: possibly use later
-  const detailLink = $(el).find(".hw_record__more__show").attr("href");
-  const mapsLink = $(el).find(".hw_record__map_link--desktop").attr("href");
+  //INFO: Could be useful for fure improvements
+  //const detailLink = $(el).find(".hw_record__more__show").attr("href");
+  //const mapsLink = $(el).find(".hw_record__map_link--desktop").attr("href");
 
   events.push({
     name: name,
@@ -57,7 +57,9 @@ $(
     added: new Date().toISOString(),
     timeText: time,
     fromDay: (() => {
-      const parts = date.split(".");
+      const dateRange = date.split(" bis ");
+      const parts = dateRange[0].trim().split(".");
+
       if (parts.length === 3) {
         const [d, m, y] = parts;
         const parsedDate = new Date(y, m - 1, d);
@@ -66,7 +68,8 @@ $(
       return null;
     })(),
     toDay: (() => {
-      const parts = date.split(".");
+      const dateRange = date.split(" bis ");
+      const parts = dateRange[dateRange.length - 1].trim().split(".");
       if (parts.length === 3) {
         const [d, m, y] = parts;
         const parsedDate = new Date(y, m - 1, d);
