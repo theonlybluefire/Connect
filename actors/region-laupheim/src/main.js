@@ -56,12 +56,24 @@ $(
     description: organizer + " " + location,
     added: new Date().toISOString(),
     timeText: time,
-    fromDay: (([d, m, y]) => new Date(y, m - 1, d).toISOString())(
-      date.split("."),
-    ),
-    toDay: (([d, m, y]) => new Date(y, m - 1, d).toISOString())(
-      date.split("."),
-    ),
+    fromDay: (() => {
+      const parts = date.split(".");
+      if (parts.length === 3) {
+        const [d, m, y] = parts;
+        const parsedDate = new Date(y, m - 1, d);
+        return isNaN(parsedDate) ? null : parsedDate.toISOString();
+      }
+      return null;
+    })(),
+    toDay: (() => {
+      const parts = date.split(".");
+      if (parts.length === 3) {
+        const [d, m, y] = parts;
+        const parsedDate = new Date(y, m - 1, d);
+        return isNaN(parsedDate) ? null : parsedDate.toISOString();
+      }
+      return null;
+    })(),
     region: REGION,
   });
 });
