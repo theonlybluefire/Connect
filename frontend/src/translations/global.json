@@ -36,7 +36,10 @@
       "atTime": "at",
       "time": "o'clock",
       "categories": "Categories",
-      "save": "Save"
+      "save": "Save",
+      "added": "Added",
+      "bookmark": "Bookmark",
+      "toWebsite": "To website"
     },
     "messages": {
       "loginError": "Error while loggin in",
@@ -85,7 +88,10 @@
       "atTime": "um",
       "time": "Uhr",
       "categories": "Kategorien",
-      "save": "Speichern"
+      "save": "Speichern",
+      "added": "Hinzugefügt",
+      "bookmark": "Merken",
+      "toWebsite": "Zur Website"
     },
     "messages": {
       "loginError": "Fehler beim Anmelden",

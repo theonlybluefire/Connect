@@ -10,7 +10,13 @@ import {
   IonLabel,
 } from "@ionic/react";
 
-import { bookmark, bookmarkOutline, map } from "ionicons/icons";
+import {
+  bookmark,
+  bookmarkOutline,
+  calendarOutline,
+  globeOutline,
+  map,
+} from "ionicons/icons";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { EventData } from "../../models/EventData";
@@ -34,59 +40,65 @@ const Event: React.FC<EventProps> = ({ event, index, bookmarkEvent }) => {
         <IonCardHeader>
           <IonCardTitle>{event.name}</IonCardTitle>
           <IonCardSubtitle>
-            <IonButton
-              data-testid="bookmark"
-              onClick={() => {
-                bookmarkEvent(event);
-                setBookmarked(event.bookmarked);
-              }}
-            >
-              <IonIcon
-                slot="icon-only"
-                icon={bookmarked ? bookmark : bookmarkOutline}
-              />
-            </IonButton>
+            <IonChip>
+              <IonIcon icon={calendarOutline} />
+              <IonLabel>
+                {event.fromDay &&
+                event.toDay &&
+                event.fromDay.toDateString() != event.toDay.toDateString() ? (
+                  <>
+                    {event.fromDay?.toLocaleDateString()} -{" "}
+                    {event?.toDay?.toLocaleDateString()}
+                  </>
+                ) : event.fromDay ? (
+                  event.fromDay.toLocaleDateString()
+                ) : (
+                  event.timeText
+                )}
+              </IonLabel>
+            </IonChip>
             <IonChip>
               <IonIcon icon={map} color="primary"></IonIcon>
               <IonLabel>{event.region}</IonLabel>
-            </IonChip>{" "}
+            </IonChip>
           </IonCardSubtitle>
         </IonCardHeader>
+
         <IonCardContent>
-          {event.timeText && !event.fromDay && !event.toDay && (
-            <p>{event.timeText}</p>
-          )}
-          {event.fromDay && (
-            <>
-              <strong>{t("event.from")}: </strong>
-              {event.fromDay.toLocaleDateString()}
-            </>
-          )}
-          {event.fromTime && (
-            <>
-              {t("events.at")} {event.fromTime} {t("event.time")}{" "}
-            </>
-          )}
-          <br />
-
-          {event.toDay && (
-            <>
-              <strong>{t("event.to")}: </strong>
-              {event.toDay.toLocaleDateString()}
-            </>
-          )}
-          {event.toTime && <>um {event.toTime} Uhr </>}
-          <br />
-
-          <strong>{t("event.categories")}: </strong>
-          {event.categories &&
-            event.categories.map((occ, idx) => (
-              <IonChip outline={true} mode="ios" key={idx}>
-                <IonLabel>{occ}</IonLabel>
-              </IonChip>
-            ))}
           <p style={{ marginTop: "0.5em" }}>{event.description}</p>
+          <br />
+          <i>
+            {t("event.added")}: {event.added.toLocaleDateString()}{" "}
+            {event.added.toLocaleTimeString()}
+          </i>
         </IonCardContent>
+        <IonButton
+          data-testid="bookmark"
+          fill="clear"
+          onClick={() => {
+            bookmarkEvent(event);
+            setBookmarked(event.bookmarked);
+          }}
+        >
+          <IonIcon
+            slot="start"
+            icon={bookmarked ? bookmark : bookmarkOutline}
+          />
+          {t("event.bookmark")}
+        </IonButton>
+        {event.website && (
+          <IonButton
+            data-testid="bookmark"
+            fill="clear"
+            onClick={() => {
+              bookmarkEvent(event);
+              setBookmarked(event.bookmarked);
+            }}
+          >
+            <IonIcon slot="start" icon={globeOutline} />
+            {t("event.toWebsite")}
+          </IonButton>
+        )}
       </IonCard>
     </>
   );

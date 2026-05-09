@@ -10,9 +10,9 @@ describe("Event", () => {
     "Lakeside Concert",
     "Open air concert with local bands",
     "Biberach",
-    new Date().toISOString(),
+    new Date(),
     "Date: 01.01.2025",
-    "0"
+    "0",
   );
 
   it("renders necessary event data", () => {
@@ -24,7 +24,7 @@ describe("Event", () => {
             /* noop */
           }}
         />
-      </IonApp>
+      </IonApp>,
     );
 
     expect(screen.getByText(sampleEvent.name)).toBeInTheDocument();
@@ -39,7 +39,7 @@ describe("Event", () => {
     render(
       <IonApp>
         <Event event={sampleEvent} bookmarkEvent={bookmarkMock} />
-      </IonApp>
+      </IonApp>,
     );
 
     const button = screen.getByTestId("bookmark");
@@ -73,17 +73,17 @@ describe("Event", () => {
     render(
       <IonApp>
         <Event event={eventWithDetails} bookmarkEvent={() => {}} />
-      </IonApp>
+      </IonApp>,
     );
 
     expect(screen.getByText("Market")).toBeInTheDocument();
     expect(screen.getByText("Books")).toBeInTheDocument();
 
     expect(
-      screen.getByText(from.toLocaleDateString(), { exact: false })
+      screen.getByText(from.toLocaleDateString(), { exact: false }),
     ).toBeInTheDocument();
     expect(
-      screen.getByText(to.toLocaleDateString(), { exact: false })
+      screen.getByText(to.toLocaleDateString(), { exact: false }),
     ).toBeInTheDocument();
 
     expect(screen.getByText("10:00", { exact: false })).toBeInTheDocument();
