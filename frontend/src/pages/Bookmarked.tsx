@@ -1,19 +1,16 @@
 import {
-  IonButton,
   IonCard,
   IonCardHeader,
   IonContent,
-  IonFooter,
-  IonIcon,
+  IonHeader,
   IonPage,
   useIonRouter,
   useIonViewWillEnter,
 } from "@ionic/react";
-import { arrowBack } from "ionicons/icons";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import Events from "../components/Events/Events";
-import { loadBookmarkedEvents } from "../logic/FirestoreLogic";
+import { bookmarkEvent, loadBookmarkedEvents } from "../logic/FirestoreLogic";
 import { EventData } from "../models/EventData";
 import { PagesProps } from "../models/PagesProps";
 
@@ -48,24 +45,28 @@ const Bookmarked: React.FC<PagesProps> = ({ setLoading, setError }) => {
     setLoading(false);
   };
 
+  const bookmarkEventHandler = async (event: EventData) => {
+    setLoading(true);
+
+    await bookmarkEvent(event.documentId);
+
+    setLoading(false);
+  };
+
   return (
     <IonPage>
-      <IonContent fullscreen>
-        <Events events={bookmarkedEvents} />
+      <IonContent fullscreen className="safe-area-margin-top">
+        <IonHeader></IonHeader>
+        <Events
+          events={bookmarkedEvents}
+          bookmarkEvent={bookmarkEventHandler}
+        />
         {bookmarkedEvents.length === 0 && (
           <IonCard mode="ios">
             <IonCardHeader>{t("messages.nothingToShow")}</IonCardHeader>
           </IonCard>
         )}
       </IonContent>
-      <IonFooter className="safe-area-margin-bottom">
-        {router.canGoBack() && (
-          <IonButton mode="ios" expand="block" onClick={() => router.goBack()}>
-            {t("button.back")}
-            <IonIcon slot="start" icon={arrowBack}></IonIcon>
-          </IonButton>
-        )}
-      </IonFooter>
     </IonPage>
   );
 };

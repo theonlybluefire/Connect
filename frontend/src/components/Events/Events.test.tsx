@@ -10,25 +10,32 @@ describe("Events", () => {
       "Book Flea Market",
       "Used books and more",
       "Biberach",
-      new Date().toISOString(),
+      new Date(),
       "Date: 05.01.2025 - 06.01.2025",
       "",
       new Date(2025, 0, 5),
       new Date(2025, 0, 6),
-      ["Market", "Books"]
+      ["Market", "Books"],
     ),
     new EventData(
       "Lakeside Concert",
       "Open air concert with local bands",
       "Biberach",
-      new Date().toISOString(),
+      new Date(),
       "Date: 01.01.2025",
-      "0"
+      "0",
     ),
   ];
 
   it("renders name and description for each event", () => {
-    render(<Events events={sampleEvents} />);
+    render(
+      <Events
+        events={sampleEvents}
+        bookmarkEvent={function (event: EventData): void {
+          /* noop */
+        }}
+      />,
+    );
 
     sampleEvents.forEach((ev) => {
       expect(screen.getByText(ev.name)).toBeInTheDocument();
@@ -37,7 +44,14 @@ describe("Events", () => {
   });
 
   it("renders region labels and handles duplicate region values", () => {
-    render(<Events events={sampleEvents} />);
+    render(
+      <Events
+        events={sampleEvents}
+        bookmarkEvent={function (event: EventData): void {
+          /* noop */
+        }}
+      />,
+    );
 
     const expectedCounts: Record<string, number> = {};
     sampleEvents.forEach((ev) => {
@@ -51,7 +65,14 @@ describe("Events", () => {
   });
 
   it("displays categories and localized dates", () => {
-    render(<Events events={sampleEvents} />);
+    render(
+      <Events
+        events={sampleEvents}
+        bookmarkEvent={function (event: EventData): void {
+          /* noop */
+        }}
+      />,
+    );
 
     // categories
     sampleEvents.forEach((ev) => {
@@ -63,19 +84,26 @@ describe("Events", () => {
     sampleEvents.forEach((ev) => {
       if (ev.fromDay) {
         expect(
-          screen.getByText(ev.fromDay.toLocaleDateString(), { exact: false })
+          screen.getByText(ev.fromDay.toLocaleDateString(), { exact: false }),
         ).toBeInTheDocument();
       }
       if (ev.toDay) {
         expect(
-          screen.getByText(ev.toDay.toLocaleDateString(), { exact: false })
+          screen.getByText(ev.toDay.toLocaleDateString(), { exact: false }),
         ).toBeInTheDocument();
       }
     });
   });
 
   it("renders nothing for an empty events array", () => {
-    render(<Events events={[]} />);
+    render(
+      <Events
+        events={[]}
+        bookmarkEvent={function (event: EventData): void {
+          /* noop */
+        }}
+      />,
+    );
     expect(screen.queryByText("Book Flea Market")).not.toBeInTheDocument();
   });
 });

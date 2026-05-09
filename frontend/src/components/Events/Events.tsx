@@ -13,14 +13,14 @@ const Events: React.FC<EventsProps> = ({ events, bookmarkEvent }) => {
   */
   const { t } = useTranslation();
 
-  const bookmarkEventHandler = (event: EventData) => {
+  const bookmarkEventHandler = async (event: EventData) => {
     if (event.bookmarked) {
       event.setBookmarked(false);
     } else {
       event.setBookmarked(true);
     }
 
-    bookmarkEvent(event);
+    await bookmarkEvent(event);
   };
 
   return (

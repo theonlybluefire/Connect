@@ -15,7 +15,8 @@
       "confirm": "Confirm",
       "bookmark": "Bookmark",
       "reset": "Reset",
-      "back": "Back"
+      "back": "Back",
+      "bookmarked": "Bookmarked"
     },
     "label": {
       "email": "E‑Mail",
@@ -68,7 +69,8 @@
       "confirm": "Bestätigen",
       "bookmark": "Merken",
       "reset": "Zurücksetzen",
-      "back": "Zurück"
+      "back": "Zurück",
+      "bookmarked": "Gemerkt"
     },
     "label": {
       "email": "E‑Mail",

@@ -20,11 +20,12 @@ import {
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { EventData } from "../../models/EventData";
+import "./Event.css";
 
 type EventProps = {
   event: EventData;
   index?: number;
-  bookmarkEvent: (event: EventData) => void;
+  bookmarkEvent: (event: EventData) => Promise<void>;
 };
 
 const Event: React.FC<EventProps> = ({ event, index, bookmarkEvent }) => {
@@ -75,8 +76,9 @@ const Event: React.FC<EventProps> = ({ event, index, bookmarkEvent }) => {
         <IonButton
           data-testid="bookmark"
           fill="clear"
-          onClick={() => {
-            bookmarkEvent(event);
+          className={"connect-save-button " + (bookmarked ? "is-saved" : "")}
+          onClick={async () => {
+            await bookmarkEvent(event);
             setBookmarked(event.bookmarked);
           }}
         >

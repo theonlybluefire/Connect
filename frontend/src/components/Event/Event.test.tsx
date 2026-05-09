@@ -20,7 +20,7 @@ describe("Event", () => {
       <IonApp>
         <Event
           event={sampleEvent}
-          bookmarkEvent={function (event: EventData): void {
+          bookmarkEvent={async function (event: EventData): Promise<void> {
             /* noop */
           }}
         />
@@ -72,7 +72,7 @@ describe("Event", () => {
 
     render(
       <IonApp>
-        <Event event={eventWithDetails} bookmarkEvent={() => {}} />
+        <Event event={eventWithDetails} bookmarkEvent={async () => {}} />
       </IonApp>,
     );
 

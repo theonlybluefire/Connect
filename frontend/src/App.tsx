@@ -7,7 +7,6 @@ import {
 } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
 import { Redirect, Route } from "react-router-dom";
-import Home from "./pages/Home/Home";
 
 /* Core CSS required for Ionic components to work properly */
 import "@ionic/react/css/core.css";
@@ -31,14 +30,9 @@ import "@ionic/react/css/text-transformation.css";
  * For more info, please see:
  * https://ionicframework.com/docs/theming/dark-mode
  */
-
-/* import '@ionic/react/css/palettes/dark.always.css'; */
-/* import '@ionic/react/css/palettes/dark.class.css'; */
 import "@ionic/react/css/palettes/dark.system.css";
 
-/* Theme variables */
 import { useState } from "react";
-//import { connectToFirebase } from "./logic/ConnectToFirebase";
 import { useTranslation } from "react-i18next";
 import "./App.css";
 import { LoginState } from "./enums";
@@ -47,6 +41,14 @@ import Login from "./pages/Login";
 import Logout from "./pages/Logout";
 import Setup from "./pages/Setup";
 import { UserService } from "./services/FirebaseServices";
+
+/**
+ * Connect Theme Additions
+ * -----------------------------------------------------
+ * Default variables and design functions for the connect theme.
+ */
+import AppWrapper from "./pages/AppWrapper";
+import "./theme/theme.css";
 import "./theme/variables.css";
 
 setupIonicReact();
@@ -92,14 +94,14 @@ const App: React.FC = () => {
 
       <IonReactRouter>
         <IonRouterOutlet>
-          <Route exact path="/home">
+          <Route path="/app">
             {loginState === LoginState.LOGGED_IN && (
-              <Home setError={setError} setLoading={setLoadingState} />
+              <AppWrapper setError={setError} setLoading={setLoadingState} />
             )}
             {loginState === LoginState.LOGGED_OUT && <Redirect to="/login" />}
           </Route>
           <Route exact path="/">
-            <Redirect to="/home" />
+            <Redirect to="/app" />
           </Route>
           <Route exact path="/login">
             {loginState === LoginState.LOGGED_IN && <Redirect to="/home" />}
