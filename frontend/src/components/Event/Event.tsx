@@ -14,8 +14,10 @@ import {
   bookmark,
   bookmarkOutline,
   calendarOutline,
+  folder,
   globeOutline,
   map,
+  timeOutline,
 } from "ionicons/icons";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -59,9 +61,27 @@ const Event: React.FC<EventProps> = ({ event, index, bookmarkEvent }) => {
               </IonLabel>
             </IonChip>
             <IonChip>
+              <IonIcon icon={timeOutline} />
+              <IonLabel>
+                {event.fromTime && event.toTime ? (
+                  <>
+                    {event.fromTime} - {event.toTime}
+                  </>
+                ) : (
+                  event.fromTime
+                )}
+              </IonLabel>
+            </IonChip>
+            <IonChip>
               <IonIcon icon={map} color="primary"></IonIcon>
               <IonLabel>{event.region}</IonLabel>
             </IonChip>
+            {event.categories?.map((cat) => (
+              <IonChip>
+                <IonIcon icon={folder}></IonIcon>
+                <IonLabel>{cat}</IonLabel>
+              </IonChip>
+            ))}
           </IonCardSubtitle>
         </IonCardHeader>
 

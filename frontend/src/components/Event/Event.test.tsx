@@ -58,7 +58,7 @@ describe("Event", () => {
       name: "Book Flea Market",
       description: "Used books and more",
       region: "Ulm",
-      added: new Date().toISOString(),
+      added: new Date(),
       timeText: "",
       fromDay: from,
       toDay: to,
