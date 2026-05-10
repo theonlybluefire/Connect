@@ -104,7 +104,7 @@ const App: React.FC = () => {
             <Redirect to="/app" />
           </Route>
           <Route exact path="/login">
-            {loginState === LoginState.LOGGED_IN && <Redirect to="/home" />}
+            {loginState === LoginState.LOGGED_IN && <Redirect to="/app" />}
             {loginState === LoginState.LOGGED_OUT && (
               <Login setError={setError} setLoading={setLoadingState} />
             )}
