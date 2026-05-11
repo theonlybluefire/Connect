@@ -24,11 +24,12 @@ import {
   IonToolbar,
   useIonRouter,
 } from "@ionic/react";
-import { bookmark, filter } from "ionicons/icons";
+import { filter } from "ionicons/icons";
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import Events from "../../components/Events/Events";
 import {
+  bookmarkEvent,
   getCategoryNames,
   getEventData,
   getRegionData,
@@ -186,92 +187,99 @@ const Home: React.FC<PagesProps> = ({ setLoading, setError }) => {
     setFastFilter(1);
   };
 
+  const bookmarkEventHandler = async (event: EventData) => {
+    setLoading(true);
+
+    await bookmarkEvent(event.documentId);
+
+    setLoading(false);
+  };
+
   return (
     <IonPage>
-      <IonHeader translucent={true} mode="ios" className="safe-area-margin-top">
-        <IonRow class="ion-align-items-center">
-          <IonCol size="auto">
-            <IonChip
-              mode="ios"
-              onClick={() => router.push("/setup", "forward", "replace")}
-              style={{ cursor: "pointer" }}
-            >
-              <IonAvatar>
-                <img
-                  alt="Silhouette of a person's head"
-                  src="https://ionicframework.com/docs/img/demos/avatar.svg"
-                />
-              </IonAvatar>
-              <IonLabel>
-                {FirebaseService.Instance.auth.currentUser?.displayName ||
-                  FirebaseService.Instance.auth.currentUser?.email}
-              </IonLabel>
-            </IonChip>
-          </IonCol>
-          <IonCol>
-            <IonSearchbar
-              ref={searchbar}
-              onKeyDown={searchEventList}
-              mode="ios"
-              animated={true}
-              placeholder={t("placeholders.search")}
-            ></IonSearchbar>
-          </IonCol>
-          <IonCol size="auto">
-            <IonButton id="open-filter-modal" mode="md">
-              <IonIcon icon={filter} slot="icon-only"></IonIcon>
-              {isFilterSet && (
-                <IonBadge
-                  color="danger"
-                  style={{
-                    position: "absolute",
-                    top: "-8px",
-                    right: "-1px",
-                    fontSize: "0.75em",
-                    zIndex: 999999,
-                  }}
-                >
-                  1
-                </IonBadge>
-              )}
-            </IonButton>
-          </IonCol>
-          <IonCol size="auto">
-            <IonButton routerLink="/bookmarked" mode="md">
-              <IonIcon slot="icon-only" icon={bookmark}></IonIcon>
-            </IonButton>
-          </IonCol>
-        </IonRow>
-        <div
-          style={{
-            display: "flex",
-            overflowX: "auto",
-            padding: "8px 0",
-            gap: "8px",
-            whiteSpace: "nowrap",
-          }}
-        >
-          <IonChip
-            className={fastFilter == 1 ? "animated-gradient" : ""}
-            onClick={handleTodayFastFilter}
-            color={fastFilter == 1 ? "" : "primary"}
-            mode="ios"
-            style={{ flex: "0 0 auto", marginLeft: "8px" }}
+      <IonHeader className="safe-area-margin-top">
+        <IonToolbar>
+          <IonRow class="ion-align-items-center">
+            <IonCol size="auto">
+              <IonButton id="open-filter-modal" mode="md">
+                <IonIcon icon={filter} slot="icon-only"></IonIcon>
+                {isFilterSet && (
+                  <IonBadge
+                    color="danger"
+                    style={{
+                      position: "absolute",
+                      top: "-8px",
+                      right: "-1px",
+                      fontSize: "0.75em",
+                      zIndex: 999999,
+                    }}
+                  >
+                    1
+                  </IonBadge>
+                )}
+              </IonButton>
+            </IonCol>
+            <IonCol>
+              <IonSearchbar
+                ref={searchbar}
+                onKeyDown={searchEventList}
+                mode="ios"
+                animated={true}
+                placeholder={t("placeholders.search")}
+              ></IonSearchbar>
+            </IonCol>
+            <IonCol size="auto">
+              <IonChip
+                mode="ios"
+                onClick={() => router.push("/setup", "forward", "replace")}
+                style={{ cursor: "pointer" }}
+              >
+                <IonAvatar>
+                  <img
+                    alt="Silhouette of a person's head"
+                    src="https://ionicframework.com/docs/img/demos/avatar.svg"
+                  />
+                </IonAvatar>
+                <IonLabel>
+                  {FirebaseService.Instance.auth.currentUser?.displayName ||
+                    FirebaseService.Instance.auth.currentUser?.email}
+                </IonLabel>
+              </IonChip>
+            </IonCol>
+          </IonRow>
+          <div
+            style={{
+              display: "flex",
+              overflowX: "auto",
+              padding: "8px 0",
+              gap: "8px",
+              whiteSpace: "nowrap",
+            }}
           >
-            <IonLabel>{t("label.today")}</IonLabel>
-          </IonChip>
-          {categories.map((label, idx) => (
-            <IonChip mode="ios" key={idx} style={{ flex: "0 0 auto" }}>
-              <IonLabel>{label}</IonLabel>
+            <IonChip
+              className={fastFilter == 1 ? "animated-gradient" : ""}
+              onClick={handleTodayFastFilter}
+              color={fastFilter == 1 ? "" : "primary"}
+              mode="ios"
+              style={{ flex: "0 0 auto", marginLeft: "8px" }}
+            >
+              <IonLabel>{t("label.today")}</IonLabel>
             </IonChip>
-          ))}
-        </div>
+            {categories.map((label, idx) => (
+              <IonChip mode="ios" key={idx} style={{ flex: "0 0 auto" }}>
+                <IonLabel>{label}</IonLabel>
+              </IonChip>
+            ))}
+          </div>{" "}
+        </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
         <IonRefresher slot="fixed" onIonRefresh={handleRefresh}>
           <IonRefresherContent></IonRefresherContent>
         </IonRefresher>
-        <Events events={currentEvents} />
+        <Events events={currentEvents} bookmarkEvent={bookmarkEventHandler} />
+
+        {/* Filter Modal*/}
         <IonModal mode="ios" ref={filterModal} trigger="open-filter-modal">
           <IonHeader>
             <IonToolbar>

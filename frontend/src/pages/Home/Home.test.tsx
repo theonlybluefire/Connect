@@ -7,7 +7,7 @@ const sampleEvents = [
     name: "Lakeside Concert",
     description: "Open air concert with local bands",
     region: "Biberach",
-    added: new Date().toISOString(),
+    added: new Date(),
     timeText: "Date: 01.01.2025",
     fromDay: new Date(2025, 0, 1),
     toDay: new Date(2025, 0, 1),

@@ -7,17 +7,17 @@ import {
   IonCardSubtitle,
   IonCardTitle,
   IonContent,
-  IonFooter,
   IonHeader,
   IonIcon,
   IonItem,
   IonList,
   IonPage,
   IonTextarea,
+  IonToolbar,
   useIonRouter,
 } from "@ionic/react";
 import { updateProfile, User } from "firebase/auth";
-import { logOutOutline } from "ionicons/icons";
+import { arrowBack, logOutOutline, save } from "ionicons/icons";
 import { useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { PagesProps } from "../models/PagesProps";
@@ -52,7 +52,7 @@ const Setup: React.FC<PagesProps> = ({ setLoading, setError }) => {
         setLoading(false);
         router.canGoBack()
           ? router.goBack()
-          : router.push("/home", "forward", "replace");
+          : router.push("/app", "forward", "replace");
       })
       .catch((error) => {
         setError(error.message.toString());
@@ -62,9 +62,25 @@ const Setup: React.FC<PagesProps> = ({ setLoading, setError }) => {
 
   return (
     <IonPage>
-      <IonHeader></IonHeader>
+      <IonHeader>
+        <IonToolbar>
+          <IonButton
+            disabled={router.canGoBack()}
+            mode="ios"
+            fill="clear"
+            onClick={() => router.goBack()}
+          >
+            {t("button.back")}
+            <IonIcon slot="start" icon={arrowBack}></IonIcon>
+          </IonButton>
+          <IonButton slot="end" mode="ios" fill="clear" onClick={finished}>
+            {t("button.finish")}
+            <IonIcon slot="end" icon={save}></IonIcon>
+          </IonButton>
+        </IonToolbar>
+      </IonHeader>
       <IonContent>
-        <IonCard mode="ios">
+        <IonCard mode="ios" style={{ marginTop: "40px" }}>
           <IonCardHeader
             className="ion-text-center"
             style={{
@@ -119,11 +135,6 @@ const Setup: React.FC<PagesProps> = ({ setLoading, setError }) => {
           </IonCardContent>
         </IonCard>
       </IonContent>
-      <IonFooter className="safe-area-margin-bottom">
-        <IonButton mode="ios" expand="block" onClick={finished}>
-          {t("button.finish")}
-        </IonButton>
-      </IonFooter>
     </IonPage>
   );
 };

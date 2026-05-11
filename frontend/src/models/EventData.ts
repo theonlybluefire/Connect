@@ -2,7 +2,7 @@ export class EventData {
   name: string;
   description: string;
   region: string;
-  added: string;
+  added: Date;
   timeText: string;
   documentId: string;
   bookmarked: boolean = false;
@@ -10,20 +10,22 @@ export class EventData {
   toDay?: Date;
   fromTime?: string;
   toTime?: string;
+  website?: string;
   categories?: string[];
 
   constructor(
     name: string,
     description: string,
     region: string,
-    added: string,
+    added: Date,
     timeText: string,
     documentId: string,
     fromDay?: Date,
     toDay?: Date,
     categories?: string[],
     fromTime?: string,
-    toTime?: string
+    toTime?: string,
+    website?: string,
   ) {
     this.name = name;
     this.description = description;
@@ -38,6 +40,7 @@ export class EventData {
     this.categories = categories;
     this.fromTime = fromTime;
     this.toTime = toTime;
+    this.website = website;
   }
 
   public setBookmarked(isBookmarked: boolean) {
@@ -45,7 +48,7 @@ export class EventData {
   }
 
   public static getRemovableBookmarkedEvents(
-    bookmarkedEvents: EventData[]
+    bookmarkedEvents: EventData[],
   ): EventData[] {
     const removable: EventData[] = [];
 

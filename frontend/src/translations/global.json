@@ -15,7 +15,8 @@
       "confirm": "Confirm",
       "bookmark": "Bookmark",
       "reset": "Reset",
-      "back": "Back"
+      "back": "Back",
+      "bookmarked": "Bookmarked"
     },
     "label": {
       "email": "E‑Mail",
@@ -36,7 +37,10 @@
       "atTime": "at",
       "time": "o'clock",
       "categories": "Categories",
-      "save": "Save"
+      "save": "Save",
+      "added": "Added",
+      "bookmark": "Bookmark",
+      "toWebsite": "To website"
     },
     "messages": {
       "loginError": "Error while loggin in",
@@ -65,7 +69,8 @@
       "confirm": "Bestätigen",
       "bookmark": "Merken",
       "reset": "Zurücksetzen",
-      "back": "Zurück"
+      "back": "Zurück",
+      "bookmarked": "Gemerkt"
     },
     "label": {
       "email": "E‑Mail",
@@ -85,7 +90,10 @@
       "atTime": "um",
       "time": "Uhr",
       "categories": "Kategorien",
-      "save": "Speichern"
+      "save": "Speichern",
+      "added": "Hinzugefügt",
+      "bookmark": "Merken",
+      "toWebsite": "Zur Website"
     },
     "messages": {
       "loginError": "Fehler beim Anmelden",
