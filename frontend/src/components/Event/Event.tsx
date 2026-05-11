@@ -60,18 +60,22 @@ const Event: React.FC<EventProps> = ({ event, index, bookmarkEvent }) => {
                 )}
               </IonLabel>
             </IonChip>
-            <IonChip>
-              <IonIcon icon={timeOutline} />
-              <IonLabel>
-                {event.fromTime && event.toTime ? (
-                  <>
-                    {event.fromTime} - {event.toTime}
-                  </>
-                ) : (
-                  event.fromTime
-                )}
-              </IonLabel>
-            </IonChip>
+            {(event.fromTime && event.toTime) ||
+              (event.fromTime && (
+                <IonChip>
+                  <IonIcon icon={timeOutline} />
+                  <IonLabel>
+                    {event.fromTime && event.toTime ? (
+                      <>
+                        {event.fromTime} - {event.toTime}
+                      </>
+                    ) : (
+                      event.fromTime
+                    )}
+                  </IonLabel>
+                </IonChip>
+              ))}
+
             <IonChip>
               <IonIcon icon={map} color="primary"></IonIcon>
               <IonLabel>{event.region}</IonLabel>
